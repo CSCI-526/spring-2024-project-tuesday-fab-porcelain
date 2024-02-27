@@ -5,7 +5,6 @@ using UnityEngine;
 public class Combination : MonoBehaviour
 {
 
-    // 杆的两端对象
     public GameObject playerA;
     public GameObject playerB;
     // 显示两个小球的位置, 调试用
@@ -22,29 +21,50 @@ public class Combination : MonoBehaviour
     // 画出射线检测的调试线
     bool drawDebugLine = true;
 
-    //public int curCombination = 1;
-    //[SerializeField] private GameObject combinationPrefab;
+    public int curCombination = 1;
+    [SerializeField] private GameObject combinationPrefab;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        // 获取刚体组件
-        mRigidbody2D = GetComponent<Rigidbody2D>();
+        CombinationSwitch();
     }
 
-    //void CombinationSwitch()
-    //{
-    //    //TODO: add more combinations
-    //    if (curCombination == 1)
-    //    {
-    //        Instantiate(combinationPrefab, (playerA.transform.position + playerB.transform.position) / 2, playerA.transform.rotation, this.transform);
-    //        gameObject.AddComponent<Rigidbody2D>();
-    //    }
-    //}
+    // Update is called once per frame
+    void Update()
+    {
+        //TODO: press space to switch combination
+        //TODO: add different update functions for each combination
+        if(curCombination == 1){
+            RodUpdate();
+        }
+    }
 
-    //FixedUpdate()是Unity自有函数[固定间隔时间内调用](类似于update函数),这里主要用来处理物理计算
     void FixedUpdate()
     {
+        //TODO: press space to switch combination
+        //TODO: add different update functions for each combination
+        if (curCombination == 1)
+        {
+            RodFixUpdate();
+        }
+    }
+
+    void CombinationSwitch()
+    {
+        //TODO: add more combinations
+        if(curCombination == 1){
+            Instantiate(combinationPrefab, (playerA.transform.position + playerB.transform.position) / 2, playerA.transform.rotation, this.transform);
+            gameObject.AddComponent<Rigidbody2D>();
+        }
+
+    }
+
+    void RodFixUpdate()
+    {
+        // fetch rigidbody
+        Rigidbody2D mRigidbody2D = GetComponent<Rigidbody2D>();
 
         // 当A键 按下时, 给playerA的位置施加一个X 轴上的-5 单位的力
         if (Input.GetKey(KeyCode.A))
@@ -71,16 +91,10 @@ public class Combination : MonoBehaviour
         }
     }
 
-
-    // Update is called once per frame
-    void Update()
+    void RodUpdate()
     {
-        // 
-        // //TODO: press space to switch combination
-        // //TODO: add different update functions for each combination
-        // if(curCombination == 1){
-        //     RodUpdate();
-        // }
+        // fetch rigidbody
+        Rigidbody2D mRigidbody2D = GetComponent<Rigidbody2D>();
 
         //检测玩家是否在地面上,决定是否能够起跳
         isPlayerBOnGround = Raycast(playerB.transform.position - new Vector3(0.0f, 0.55f, 0.0f), new Vector2(0, -1), 0.2f, LayerMask.NameToLayer("Ground"));
@@ -89,6 +103,8 @@ public class Combination : MonoBehaviour
         // Debug.Log(playerA.transform.position + "   " + playerBlue.transform.position);
         playerAPosition = playerA.transform.position;
         playerBPosition = playerB.transform.position;
+
+
 
         // 当W 松开时, 给playerA 的位置施加一个Y 轴上的150 单位的力
         if (Input.GetKeyUp(KeyCode.W))
@@ -132,5 +148,4 @@ public class Combination : MonoBehaviour
         }
         return hit;
     }
-
 }
