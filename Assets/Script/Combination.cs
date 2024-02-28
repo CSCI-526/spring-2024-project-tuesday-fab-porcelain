@@ -13,6 +13,12 @@ public class Combination : MonoBehaviour
     // 起跳力度
     public float jumpForce = 260f;
 
+    // 抓地力度
+    public float GripForce = -200f;
+    // 左边力
+    public float LeftForce = -10f;
+    // 右边力
+    public float RightForce = 10f;
     // 刚体
     Rigidbody2D mRigidbody2D;
     // 判断小球是否在地面上,从而决定是否能够起跳
@@ -69,30 +75,32 @@ public class Combination : MonoBehaviour
         // 当A键 按下时, 给playerA的位置施加一个X 轴上的-5 单位的力
         if (Input.GetKey(KeyCode.A))
         {
-            mRigidbody2D.AddForceAtPosition(new Vector2(-5.0f, 0.0f), playerA.transform.position, ForceMode2D.Force);
+            mRigidbody2D.AddForceAtPosition(new Vector2(LeftForce, 0.0f), playerA.transform.position, ForceMode2D.Force);
         }
 
         // 当D键 按下时, 给playerBlue 的位置施加一个X 轴上的5 单位的力
         if (Input.GetKey(KeyCode.D))
         {
-            mRigidbody2D.AddForceAtPosition(new Vector2(5.0f, 0.0f), playerA.transform.position, ForceMode2D.Force);
+            mRigidbody2D.AddForceAtPosition(new Vector2(RightForce, 0.0f), playerA.transform.position, ForceMode2D.Force);
         }
 
         // 当左箭头 按下时, 给playerB的位置施加一个X 轴上的-5 单位的力
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            mRigidbody2D.AddForceAtPosition(new Vector2(-5.0f, 0.0f), playerB.transform.position, ForceMode2D.Force);
+            mRigidbody2D.AddForceAtPosition(new Vector2(LeftForce, 0.0f), playerB.transform.position, ForceMode2D.Force);
         }
 
         // 当右箭头 按下时, 给playerB 的位置施加一个X 轴上的5 单位的力
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            mRigidbody2D.AddForceAtPosition(new Vector2(5.0f, 0.0f), playerB.transform.position, ForceMode2D.Force);
+            mRigidbody2D.AddForceAtPosition(new Vector2(RightForce, 0.0f), playerB.transform.position, ForceMode2D.Force);
         }
     }
 
     void RodUpdate()
     {
+
+
         // fetch rigidbody
         Rigidbody2D mRigidbody2D = GetComponent<Rigidbody2D>();
 
@@ -116,13 +124,37 @@ public class Combination : MonoBehaviour
             }
         }
 
-        // 当上箭头 松开时, 给playerB 的位置施加一个Y 轴上的150 单位的力
+
+        // 当S 松开时, 给playerA 的位置施加一个Y 轴上 一个向下 GripForce 单位的力
+        if (Input.GetKeyUp(KeyCode.S))
+        {
+            if (isPlayerAOnGround)
+            {
+                //Debug.Log("Will add force to player A");
+                mRigidbody2D.AddForceAtPosition(new Vector2(0.0f, GripForce), playerA.transform.position, ForceMode2D.Force);
+            }
+        }
+
+
+
+
+        // 当上箭头 松开时, 给playerB 的位置施加一个Y 轴上的 150 单位的力
         if (Input.GetKeyUp(KeyCode.UpArrow))
         {
             if (isPlayerBOnGround)
             {
                 //Debug.Log("Will add force to player Green");
                 mRigidbody2D.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerB.transform.position, ForceMode2D.Force);
+            }
+        }
+
+        // 当下箭头 松开时, 给playerB 的位置施加一个Y 轴上一个向下 GripForce 单位的力
+        if (Input.GetKeyUp(KeyCode.DownArrow))
+        {
+            if (isPlayerBOnGround)
+            {
+                //Debug.Log("Will add force to player Green");
+                mRigidbody2D.AddForceAtPosition(new Vector2(0.0f, GripForce), playerB.transform.position, ForceMode2D.Force);
             }
         }
 
