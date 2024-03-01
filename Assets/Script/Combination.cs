@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Combination : MonoBehaviour
 {
 
     public GameObject playerA;
     public GameObject playerB;
+    public GameObject flag;
     // 显示两个小球的位置, 调试用
     public Vector3 playerAPosition;
     public Vector3 playerBPosition;
@@ -30,7 +32,6 @@ public class Combination : MonoBehaviour
     public int curCombination = 1;
     [SerializeField] private GameObject combinationPrefab;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -45,6 +46,7 @@ public class Combination : MonoBehaviour
         if(curCombination == 1){
             RodUpdate();
         }
+        reachFlag();
     }
 
     void FixedUpdate()
@@ -179,5 +181,12 @@ public class Combination : MonoBehaviour
             Debug.DrawRay(sourcePosition, rayDirection * length, color);
         }
         return hit;
+    }
+
+    void reachFlag() {
+        float dist = Vector2.Distance(flag.transform.localPosition, transform.localPosition);
+        if(dist < 3.0f) {
+            // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        }
     }
 }
