@@ -13,7 +13,7 @@ public class CreatFallingBalls : MonoBehaviour
     private void Start()
     {
         // 每2秒调用一次; (调用,调用起始时间, 调用时间间隔)
-        InvokeRepeating("FllingBall", 0f, 4f);
+        InvokeRepeating("FllingBall", 0f, 3f);
     }
 
     void FllingBall()
