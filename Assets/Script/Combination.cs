@@ -263,7 +263,7 @@ public class Combination : MonoBehaviour
         }
     }
 
-    void JumpHandler()
+      void JumpHandler()
     {
         //检测玩家是否在地面上,决定是否能够起跳
         isPlayerBOnGround = Raycast(playerB.transform.position - new Vector3(0.0f, 0.55f, 0.0f), new Vector2(0, -1), 0.2f, LayerMask.NameToLayer("Ground"));
@@ -275,10 +275,24 @@ public class Combination : MonoBehaviour
         // 当W 松开时, 给playerA 的位置施加一个Y 轴上的150 单位的力
         if (Input.GetKeyUp(KeyCode.W))
         {
-            if (isPlayerAOnGround)
-            {
-                rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerA.transform.position, ForceMode2D.Force);
-            }
+                if (isPlayerAOnGround)
+                {
+                    // 计算小球B和小球A在X轴上的差值
+                    float horiDiff = playerB.transform.position.x - playerA.transform.position.x;
+
+                    // 检查小球B是否在小球A的正上方
+                    // 并且小球B和小球A在X轴上的差值绝对值在1以内
+                    if (playerB.transform.position.y > playerA.transform.position.y && Mathf.Abs(horiDiff) <= 1)
+                    {
+                        // 如果小球B在上方且小球A在地面上，则应用2倍跳跃力
+                        rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce * 3), playerA.transform.position, ForceMode2D.Force);
+                    }
+                    else
+                    {
+                        // 否则应用正常跳跃力
+                        rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerA.transform.position, ForceMode2D.Force);
+                    }
+                }           
         }
 
         // 当S 松开时, 给playerA 的位置施加一个Y 轴上 一个向下 GripForce 单位的力
@@ -288,6 +302,8 @@ public class Combination : MonoBehaviour
             //{
             //    rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerA.transform.position, ForceMode2D.Force);
             //}
+            //一个在上一个在下的时候增加的跳跃力
+
             rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, GripForce), playerA.transform.position, ForceMode2D.Force);
         }
 
@@ -296,7 +312,21 @@ public class Combination : MonoBehaviour
         {
             if (isPlayerBOnGround)
             {
-                rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerB.transform.position, ForceMode2D.Force);
+                // 计算小球B和小球A在X轴上的差值
+                float horiDiff = playerB.transform.position.x - playerA.transform.position.x;
+
+                // 检查小球B是否在小球A的正下方
+                // 并且小球B和小球A在X轴上的差值绝对值在1以内
+                if (playerB.transform.position.y < playerA.transform.position.y && Mathf.Abs(horiDiff) <= 1)
+                {
+                    // 如果小球B在下方且小球B在地面上，则应用2倍跳跃力
+                    rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, jumpForce * 3), playerB.transform.position, ForceMode2D.Force);
+                }
+                else
+                {
+                    // 否则应用正常跳跃力
+                    rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerB.transform.position, ForceMode2D.Force);
+                }
             }
         }
         // 当下箭头 松开时, 给playerB 的位置施加一个Y 轴上一个向下 GripForce 单位的力

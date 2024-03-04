@@ -9,6 +9,9 @@ public class CreatFallingBalls : MonoBehaviour
     private bool Falling = true;
     // 生成位置
     public Vector3 FallingPosition = new Vector3(-30.11f, 15.66f, 0); 
+     // List to keep track of instantiated balls
+    private List<GameObject> instantiatedBalls = new List<GameObject>();
+
 
     private void Start()
     {
@@ -24,7 +27,8 @@ public class CreatFallingBalls : MonoBehaviour
         if (Falling) 
         {
             //Debug.Log("Spawning ball at " + FallingPosition);
-            Instantiate(BallPrefab, FallingPosition, Quaternion.identity);
+            GameObject newBall = Instantiate(BallPrefab, FallingPosition, Quaternion.identity);
+            instantiatedBalls.Add(newBall);
         }
 
     }
@@ -32,6 +36,15 @@ public class CreatFallingBalls : MonoBehaviour
     public void StopFlling() {
         //Falling = false;
         Falling = !Falling;
+
+        foreach (GameObject ball in instantiatedBalls)
+        {
+            Destroy(ball);
+        }
+
+        // Clear the list
+        instantiatedBalls.Clear();
+
     }
 
 
