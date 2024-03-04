@@ -8,8 +8,10 @@ public class Trick5Button : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        
+
         Trick5.Instance.ButtonPressed(buttonId);
 
     }
 }
+
+
