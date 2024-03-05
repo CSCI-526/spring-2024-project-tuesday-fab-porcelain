@@ -40,7 +40,7 @@ public class Combination : MonoBehaviour
     public GameObject stick;
     public bool flagSlowMode = false;
 
-
+    
     void Start()
     {
         //初始化玩家A&B; 初始化绘制连接线LineRenderer
@@ -75,6 +75,8 @@ public class Combination : MonoBehaviour
         handleSwitch();
         //处理跳跃操作
         JumpHandler();
+
+        hookHandler();
         //待开发,滞空
         //makeLevitating();
     }
@@ -235,6 +237,7 @@ public class Combination : MonoBehaviour
     {
         //检测玩家是否在地面上,决定是否能够起跳
         isPlayerBOnGround = Raycast(playerB.transform.position - new Vector3(0.0f, 0.55f, 0.0f), new Vector2(0, -1), 0.2f, LayerMask.GetMask("Ground"));
+        // Debug.Log("isPlayerBOnGround: " + isPlayerBOnGround);
         isPlayerAOnGround = Raycast(playerA.transform.position - new Vector3(0.0f, 0.55f, 0.0f), new Vector2(0, -1), 0.2f, LayerMask.GetMask("Ground"));
 
         playerAPosition = playerA.transform.position;
@@ -313,50 +316,69 @@ public class Combination : MonoBehaviour
 
     }
 
+    //检测玩家是否接触到墙
+    bool IsOnWall(RaycastHit2D hit)
+        {
+            if (hit != null){
+                if(hit.collider!=null){
+                    if( hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground")){
+                        return true;
+                    }
+                }
+                
+            }
+           
+            return false;
+        }
+
+    void hookHandler()
+    {
 
 
+        // 检测玩家B是否在墙边
+        RaycastHit2D hit0 = Raycast(playerB.transform.position - new Vector3(-0.55f, 0.0f, 0.0f), new Vector2(1, 0), 0.2f, -1);
+        bool isPlayerBOnwallL = IsOnWall(hit0);
 
-    // void hookHandler()
-    // {
+        RaycastHit2D hit1 = Raycast(playerB.transform.position - new Vector3(0.55f, 0.0f, 0.0f), new Vector2(-1, 0), 0.2f, -1);
+        bool isPlayerBOnwallR = IsOnWall(hit1);
 
-  
+        // 检测玩家A是否在墙边
+        RaycastHit2D hit2 = Raycast(playerA.transform.position - new Vector3(-0.55f, 0.0f, 0.0f), new Vector2(1, 0), 0.2f, -1);
+        bool isPlayerAOnwallL = IsOnWall(hit2);
 
-    //     //检测玩家B是否在墙边
-    //     bool isPlayerBOnwallL= Raycast(playerB.transform.position - new Vector3(-0.55f, 0.0f, 0.0f), new Vector2(1, 0), 0.2f, LayerMask.NameToLayer("Ground"));
-    //     bool isPlayerBOnwallR = Raycast(playerB.transform.position - new Vector3(0.55f, 0.0f, 0.0f), new Vector2(-1, 0), 0.2f, LayerMask.NameToLayer("Ground"));
-    //     //检测玩家B是否在墙边
-    //     bool isPlayerAOnwallL= Raycast(playerA.transform.position - new Vector3(-0.55f, 0.0f, 0.0f), new Vector2(1, 0), 0.2f, LayerMask.NameToLayer("Ground"));
-    //     bool isPlayerAOnwallR = Raycast(playerA.transform.position - new Vector3(0.55f, 0.0f, 0.0f), new Vector2(-1, 0), 0.2f, LayerMask.NameToLayer("Ground"));
-
-    //     if ((isPlayerBOnwallL||isPlayerBOnwallR)&&Input.GetKey(KeyCode.M))
-    //     {
-    //         // rigidbody2DPlayerB.AddForceAtPosition(new Vector2(RightForce*100, 0.0f), playerB.transform.position, ForceMode2D.Force);
+        RaycastHit2D hit3 = Raycast(playerA.transform.position - new Vector3(0.55f, 0.0f, 0.0f), new Vector2(-1, 0), 0.2f, -1);
+        bool isPlayerAOnwallR = IsOnWall(hit3);
 
 
-    //         rigidbody2DPlayerB.constraints = RigidbodyConstraints2D.FreezePosition;
-
-    //     }
-    //     else
-    //     {
-
-    //         rigidbody2DPlayerB.constraints = RigidbodyConstraints2D.None;
-
-    //     }
-    //     if ((isPlayerAOnwallL||isPlayerAOnwallR)&&Input.GetKey(KeyCode.V))
-    //     {
-    //         // rigidbody2DPlayerB.AddForceAtPosition(new Vector2(RightForce*100, 0.0f), playerB.transform.position, ForceMode2D.Force);
+        if ((isPlayerBOnwallL||isPlayerBOnwallR)&&Input.GetKey(KeyCode.M))
+        {
+            // rigidbody2DPlayerB.AddForceAtPosition(new Vector2(RightForce*100, 0.0f), playerB.transform.position, ForceMode2D.Force);
 
 
-    //         rigidbody2DPlayerA.constraints = RigidbodyConstraints2D.FreezePosition;
+            rigidbody2DPlayerB.constraints = RigidbodyConstraints2D.FreezePosition;
 
-    //     }
-    //     else
-    //     {
+        }
+        else
+        {
 
-    //         rigidbody2DPlayerA.constraints = RigidbodyConstraints2D.None;
+            rigidbody2DPlayerB.constraints = RigidbodyConstraints2D.None;
 
-    //     }
+        }
+        if ((isPlayerAOnwallL||isPlayerAOnwallR)&&Input.GetKey(KeyCode.V))
+        {
+            // rigidbody2DPlayerB.AddForceAtPosition(new Vector2(RightForce*100, 0.0f), playerB.transform.position, ForceMode2D.Force);
 
+
+            rigidbody2DPlayerA.constraints = RigidbodyConstraints2D.FreezePosition;
+
+        }
+        else
+        {
+
+            rigidbody2DPlayerA.constraints = RigidbodyConstraints2D.None;
+
+        }
+    }
 
 
     // }
