@@ -40,7 +40,7 @@ public class Combination : MonoBehaviour
     public GameObject stick;
     public bool flagSlowMode = false;
 
-    
+
     void Start()
     {
         //初始化玩家A&B; 初始化绘制连接线LineRenderer
@@ -75,10 +75,9 @@ public class Combination : MonoBehaviour
         handleSwitch();
         //处理跳跃操作
         JumpHandler();
-
-        hookHandler();
         //待开发,滞空
         //makeLevitating();
+        hookHandler();
     }
 
     void FixedUpdate()
@@ -237,7 +236,6 @@ public class Combination : MonoBehaviour
     {
         //检测玩家是否在地面上,决定是否能够起跳
         isPlayerBOnGround = Raycast(playerB.transform.position - new Vector3(0.0f, 0.55f, 0.0f), new Vector2(0, -1), 0.2f, LayerMask.GetMask("Ground"));
-        // Debug.Log("isPlayerBOnGround: " + isPlayerBOnGround);
         isPlayerAOnGround = Raycast(playerA.transform.position - new Vector3(0.0f, 0.55f, 0.0f), new Vector2(0, -1), 0.2f, LayerMask.GetMask("Ground"));
 
         playerAPosition = playerA.transform.position;
@@ -316,20 +314,8 @@ public class Combination : MonoBehaviour
 
     }
 
-    //检测玩家是否接触到墙
-    bool IsOnWall(RaycastHit2D hit)
-        {
-            if (hit != null){
-                if(hit.collider!=null){
-                    if( hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground")){
-                        return true;
-                    }
-                }
-                
-            }
-           
-            return false;
-        }
+
+
 
     void hookHandler()
     {
@@ -378,6 +364,21 @@ public class Combination : MonoBehaviour
             rigidbody2DPlayerA.constraints = RigidbodyConstraints2D.None;
 
         }
+    }
+
+     //检测玩家是否接触到墙
+    bool IsOnWall(RaycastHit2D hit)
+    {
+        if (hit != null){
+            if(hit.collider!=null){
+                if( hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground")){
+                    return true;
+                }
+            }
+            
+        }
+       
+        return false;
     }
 
 
