@@ -6,6 +6,7 @@ using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Combination : MonoBehaviour
 {
@@ -28,16 +29,6 @@ public class Combination : MonoBehaviour
     Rigidbody2D rigidbody2DPlayerB;
     //A-B之间画线
     public LineRenderer lineRenderer;
-    //存储AB之间的距离
-    public float distanceAB = 0.0f;
-    //存储抛物线方程
-    public double[] abc = new double[]{0, 0, 0};
-    //关节对象&绳子起点&终点对象
-    public GameObject articulation;
-    GameObject ropeStart;
-    GameObject ropeEnd;
-    
-    List<GameObject> ropeParts = new List<GameObject>();
 
     // 判断小球是否在地面上,从而决定是否能够起跳
     public bool isPlayerAOnGround = false;
@@ -46,8 +37,8 @@ public class Combination : MonoBehaviour
     bool drawDebugLine = true;
     //连接物索引
     public int connectorIndex = 0;
-    [SerializeField] private GameObject combinationPrefab;
-
+    public GameObject stick;
+    public bool flagSlowMode = false;
 
 
     void Start()
@@ -58,21 +49,34 @@ public class Combination : MonoBehaviour
         lineRenderer = playerA.GetComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
         //调用切换功能,初始调用棍子链接
-        CombinationSwitch();
+        // CombinationSwitch();
         switchToStick();
-
-
-
     }
 
     void Update()
     {
-        //调用切换功能,跳跃功能
-        CombinationSwitch();
-        hookHandler();
-        JumpHandler();
-        
+        if(flagSlowMode) {
+            Time.timeScale = 0.001f;
+        }
+        else
+        {
+            Time.timeScale = 1.0f;
+        }
 
+        //更新线条位置
+        lineRenderer.SetPosition(0, playerA.transform.position);
+        lineRenderer.SetPosition(1, playerB.transform.position);
+        //按Q压缩弹簧
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    compressTo(1);
+        //}
+        //处理转换操作, 
+        handleSwitch();
+        //处理跳跃操作
+        JumpHandler();
+        //待开发,滞空
+        //makeLevitating();
     }
 
     void FixedUpdate()
@@ -84,104 +88,77 @@ public class Combination : MonoBehaviour
 
     //转换到棍子
     void switchToStick() {
-        //Debug.Log("Switch to STICK mode");
-        //画线
-        lineRenderer.positionCount = 2;
         //模拟木头颜色
-        Color woodColor = new Color(0.72f, 0.52f, 0.04f, 1f); 
-        lineRenderer.startColor = woodColor;
-        lineRenderer.endColor = woodColor;
+        Color stickColor = new Color(0.72f, 0.52f, 0.04f, 1f); 
+        lineRenderer.startColor = stickColor;
+        lineRenderer.endColor = stickColor;
 
-        //玩家A启用最大距离4,启用距离矫正器,禁用弹簧关节
-        playerA.GetComponent<DistanceJoint2D>().enabled = true;
-        playerA.GetComponent<DistanceJoint2D>().distance = 4;
-        playerA.GetComponent<DistanceJoint2D>().maxDistanceOnly = false;
+        playerA.SetActive(false);
+        playerB.SetActive(false);
+        stick.SetActive(false);
+
+       
+        var xOffset = Mathf.Cos(playerA.transform.rotation.eulerAngles.z * Mathf.PI / 180) * 4;
+
+        var yOffset = Mathf.Sin(playerA.transform.rotation.eulerAngles.z * Mathf.PI / 180) * 4;
+
+        playerB.transform.position = (playerA.transform.position + new Vector3(xOffset, yOffset, 0));
+        playerB.transform.rotation = playerA.transform.rotation;
+
+        stick.transform.position = (playerA.transform.position + playerB.transform.position) / 2f;
+        stick.transform.rotation = playerA.transform.rotation;
+
+        playerA.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        playerA.GetComponent<Rigidbody2D>().angularVelocity = 0;
+
+        playerB.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        playerB.GetComponent<Rigidbody2D>().angularVelocity = 0;
+
+        stick.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        stick.GetComponent<Rigidbody2D>().angularVelocity = 0;
+
+        playerA.SetActive(true);
+        playerB.SetActive(true);
+        stick.SetActive(true);
+
+
+        //激活棍子
+        stick.SetActive(true);
+        //玩家A禁用距离矫正器,禁用弹簧关节
+        playerA.GetComponent<DistanceJoint2D>().enabled = false;
         playerA.GetComponent<SpringJoint2D>().enabled = false;
 
-        playerB.GetComponent<DistanceJoint2D>().enabled = true;
-        playerB.GetComponent<DistanceJoint2D>().distance = 4;
-        playerB.GetComponent<DistanceJoint2D>().maxDistanceOnly = false;
+        playerB.GetComponent<DistanceJoint2D>().enabled = false;
         playerB.GetComponent<SpringJoint2D>().enabled = false;
 
-    }
-    //生成绳子
-    void makeRope()
-    {
-        GameObject lastPart = null;
-        for (int i = 0; i < 16; i++)
-        {
-            //创建预制体实例,把单个绳子单个部件给part
-            GameObject part = Instantiate(articulation);
-            //给部件添加物理约束
-            part.AddComponent<DistanceJoint2D>();
-            //设置重力为0.01&受重力影响0.1
-            part.GetComponent<Rigidbody2D>().mass = 0.01f;
-            part.GetComponent<Rigidbody2D>().gravityScale = 0.1f;
-
-            if (lastPart == null)
-            {
-                lastPart = part;
-            }
-
-            if (i == 0)
-            {
-                ropeStart = part;
-            }
-            if (i == 15)
-            {
-                ropeEnd = part;
-            }
-            //配置部件连接
-            if (i != 0)
-            {
-                DistanceJoint2D partJoint = lastPart.GetComponent<DistanceJoint2D>();
-                partJoint.autoConfigureDistance = false;
-                partJoint.distance = 0.25f;
-                partJoint.connectedBody = part.GetComponent<Rigidbody2D>();
-            }
-            ropeParts.Add(part);
-            lastPart = part;
-        }
     }
 
     //转换到绳子
     void switchToRope() {
-        //Debug.Log("Switch to ROPE mode");
-        lineRenderer.positionCount = 2;
-        //模拟绳子颜色
+        // 模拟绳子颜色
         Color ropeColor = new Color(0.9f, 0.85f, 0.5f, 1f); 
         lineRenderer.startColor = ropeColor;
         lineRenderer.endColor = ropeColor;
 
-        //玩家A启用最大距离4,启用距离矫正器,禁用弹簧关节
+        //禁用棍子
+        stick.SetActive(false);
+        //玩家A启用距离矫正器
         playerA.GetComponent<DistanceJoint2D>().enabled = true;
-        playerA.GetComponent<DistanceJoint2D>().distance = 4;
-        playerA.GetComponent<DistanceJoint2D>().maxDistanceOnly = true;
-        playerA.GetComponent<SpringJoint2D>().enabled = false;
-
+        playerA.GetComponent<DistanceJoint2D>().connectedBody = playerB.GetComponent<Rigidbody2D>();
 
         playerB.GetComponent<DistanceJoint2D>().enabled = true;
-        playerB.GetComponent<DistanceJoint2D>().distance = 4;
-        playerB.GetComponent<DistanceJoint2D>().maxDistanceOnly = true;
-        playerB.GetComponent<SpringJoint2D>().enabled = false;
-
-
-        foreach (var item in ropeParts)
-        {
-            //item.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-            //item.GetComponent<Rigidbody2D>().angularVelocity = 0;
-        }
+        playerB.GetComponent<DistanceJoint2D>().connectedBody = playerA.GetComponent<Rigidbody2D>();
     }
 
     //转换到弹簧
     void SwitchToSpring() {
-        //Debug.Log("Switch to SPRING mode");
-        lineRenderer.positionCount = 2;
         // 模拟金属颜色
-        Color metalColor = new Color(0.75f, 0.75f, 0.8f, 1f); 
-        lineRenderer.startColor = metalColor;
-        lineRenderer.endColor = metalColor;
+        Color springColor = new Color(0.75f, 0.75f, 0.8f, 1f); 
+        lineRenderer.startColor = springColor;
+        lineRenderer.endColor = springColor;
 
+        //禁用棍子
+        stick.SetActive(false);
         //玩家A启用距离4,禁用距离矫正器,启用弹簧关节
         playerA.GetComponent<DistanceJoint2D>().enabled = false;
         playerA.GetComponent<SpringJoint2D>().enabled = true;
@@ -191,47 +168,34 @@ public class Combination : MonoBehaviour
         playerB.GetComponent<SpringJoint2D>().enabled = true;
         playerB.GetComponent<SpringJoint2D>().distance = 4;
     }
-    //抛物线逻辑 y=ax2 + bx + c 求b,c
-    double[] getParabola(float a, float x1, float y1, float x2, float y2) {
-        double b = ((y2 - y1) - (a * (x2 * x2 - x1 * x1))) / (x2 - x1);
-        double c = y1 - a * x1 * x1 - b * x1;
 
-        return new double[] { b, c };
-    }
-    //抛物线逻辑 y = ax2 + bx + c 求 y
-    double getY(double a, double b, double c, double x){
-        return x * x * a + x * b + c;
-    }
+    void handleSwitch() {
+        //检测空格键
+        if(Input.GetKeyDown(KeyCode.Space)) {
+            //A在平台上,B在平台下阻止切换棍子和弹簧
+            if(connectorIndex == 1) {
+                var direction = (playerA.transform.position - playerB.transform.position).normalized;
+                var raycastHit2D = Raycast(
+                    playerA.transform.position - direction * 0.55f, 
+                    -direction, 
+                    Vector2.Distance(playerA.transform.position, playerB.transform.position) - 1.10f, 
+                    LayerMask.NameToLayer("Ground")
+                );
 
-    
-    void CombinationSwitch()
-    {
-        //计算A-B之间距离
-        distanceAB = Vector2.Distance(playerA.transform.position, playerB.transform.position);
-        //无论切换的是几,都把lineRenderer的端点设置在A和B
-        if (connectorIndex == 0)
-        {
-            lineRenderer.SetPosition(0, playerA.transform.position);
-            lineRenderer.SetPosition(1, playerB.transform.position);
-        }
-        else
-        {
-            lineRenderer.SetPosition(0, playerA.transform.position);
-            lineRenderer.SetPosition(1, playerB.transform.position);
-        }
+                if(raycastHit2D) {
+                    return ;
+                }
+            }
 
-        //按空格切换连接方式
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
             connectorIndex += 1;
             connectorIndex %= 3;
-
-            switch (connectorIndex)
-            {
+            //根据索引切换连接模式
+            switch(connectorIndex) {
                 case 0: switchToStick(); break;
                 case 1: switchToRope(); break;
                 case 2: SwitchToSpring(); break;
             }
+
         }
     }
 
@@ -241,58 +205,64 @@ public class Combination : MonoBehaviour
         // 当A键 按下时, 给playerA的位置施加一个X 轴上的-5 单位的力
         if (Input.GetKey(KeyCode.A))
         {
+            
             rigidbody2DPlayerA.AddForceAtPosition(new Vector2(LeftForce, 0.0f), playerA.transform.position, ForceMode2D.Force);
         }
 
         // 当D键 按下时, 给playerBlue 的位置施加一个X 轴上的5 单位的力
         if (Input.GetKey(KeyCode.D))
         {
+                        
             rigidbody2DPlayerA.AddForceAtPosition(new Vector2(RightForce, 0.0f), playerA.transform.position, ForceMode2D.Force);
         }
 
         // 当左箭头 按下时, 给playerB的位置施加一个X 轴上的-5 单位的力
         if (Input.GetKey(KeyCode.LeftArrow))
         {
+                        
             rigidbody2DPlayerB.AddForceAtPosition(new Vector2(LeftForce, 0.0f), playerB.transform.position, ForceMode2D.Force);
         }
 
         // 当右箭头 按下时, 给playerB 的位置施加一个X 轴上的5 单位的力
         if (Input.GetKey(KeyCode.RightArrow))
         {
+                        
             rigidbody2DPlayerB.AddForceAtPosition(new Vector2(RightForce, 0.0f), playerB.transform.position, ForceMode2D.Force);
         }
     }
 
-      void JumpHandler()
+    void JumpHandler()
     {
         //检测玩家是否在地面上,决定是否能够起跳
-        isPlayerBOnGround = Raycast(playerB.transform.position - new Vector3(0.0f, 0.55f, 0.0f), new Vector2(0, -1), 0.2f, LayerMask.NameToLayer("Ground"));
-        isPlayerAOnGround = Raycast(playerA.transform.position - new Vector3(0.0f, 0.55f, 0.0f), new Vector2(0, -1), 0.2f, LayerMask.NameToLayer("Ground"));
+        isPlayerBOnGround = Raycast(playerB.transform.position - new Vector3(0.0f, 0.55f, 0.0f), new Vector2(0, -1), 0.2f, LayerMask.GetMask("Ground"));
+        isPlayerAOnGround = Raycast(playerA.transform.position - new Vector3(0.0f, 0.55f, 0.0f), new Vector2(0, -1), 0.2f, LayerMask.GetMask("Ground"));
 
         playerAPosition = playerA.transform.position;
         playerBPosition = playerB.transform.position;
 
+
+
         // 当W 松开时, 给playerA 的位置施加一个Y 轴上的150 单位的力
         if (Input.GetKeyUp(KeyCode.W))
         {
-                if (isPlayerAOnGround)
-                {
-                    // 计算小球B和小球A在X轴上的差值
-                    float horiDiff = playerB.transform.position.x - playerA.transform.position.x;
+            if (isPlayerAOnGround)
+            {
+                // 计算小球B和小球A在X轴上的差值
+                float horiDiff = playerB.transform.position.x - playerA.transform.position.x;
 
-                    // 检查小球B是否在小球A的正上方
-                    // 并且小球B和小球A在X轴上的差值绝对值在1以内
-                    if (playerB.transform.position.y > playerA.transform.position.y && Mathf.Abs(horiDiff) <= 1)
-                    {
-                        // 如果小球B在上方且小球A在地面上，则应用2倍跳跃力
-                        rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce * 3), playerA.transform.position, ForceMode2D.Force);
-                    }
-                    else
-                    {
-                        // 否则应用正常跳跃力
-                        rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerA.transform.position, ForceMode2D.Force);
-                    }
-                }           
+                // 检查小球B是否在小球A的正上方
+                // 并且小球B和小球A在X轴上的差值绝对值在1以内
+                if (playerB.transform.position.y > playerA.transform.position.y && Mathf.Abs(horiDiff) <= 1)
+                {
+                    // 如果小球B在上方且小球A在地面上，则应用2倍跳跃力
+                    rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce * 2), playerA.transform.position, ForceMode2D.Force);
+                }
+                else
+                {
+                    // 否则应用正常跳跃力
+                    rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerA.transform.position, ForceMode2D.Force);
+                }
+            }
         }
 
         // 当S 松开时, 给playerA 的位置施加一个Y 轴上 一个向下 GripForce 单位的力
@@ -320,7 +290,7 @@ public class Combination : MonoBehaviour
                 if (playerB.transform.position.y < playerA.transform.position.y && Mathf.Abs(horiDiff) <= 1)
                 {
                     // 如果小球B在下方且小球B在地面上，则应用2倍跳跃力
-                    rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, jumpForce * 3), playerB.transform.position, ForceMode2D.Force);
+                    rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, jumpForce * 2), playerB.transform.position, ForceMode2D.Force);
                 }
                 else
                 {
@@ -346,50 +316,50 @@ public class Combination : MonoBehaviour
 
 
 
-    void hookHandler()
-    {
+    // void hookHandler()
+    // {
 
   
 
-        //检测玩家B是否在墙边
-        bool isPlayerBOnwallL= Raycast(playerB.transform.position - new Vector3(-0.55f, 0.0f, 0.0f), new Vector2(1, 0), 0.2f, LayerMask.NameToLayer("Ground"));
-        bool isPlayerBOnwallR = Raycast(playerB.transform.position - new Vector3(0.55f, 0.0f, 0.0f), new Vector2(-1, 0), 0.2f, LayerMask.NameToLayer("Ground"));
-        //检测玩家B是否在墙边
-        bool isPlayerAOnwallL= Raycast(playerA.transform.position - new Vector3(-0.55f, 0.0f, 0.0f), new Vector2(1, 0), 0.2f, LayerMask.NameToLayer("Ground"));
-        bool isPlayerAOnwallR = Raycast(playerA.transform.position - new Vector3(0.55f, 0.0f, 0.0f), new Vector2(-1, 0), 0.2f, LayerMask.NameToLayer("Ground"));
+    //     //检测玩家B是否在墙边
+    //     bool isPlayerBOnwallL= Raycast(playerB.transform.position - new Vector3(-0.55f, 0.0f, 0.0f), new Vector2(1, 0), 0.2f, LayerMask.NameToLayer("Ground"));
+    //     bool isPlayerBOnwallR = Raycast(playerB.transform.position - new Vector3(0.55f, 0.0f, 0.0f), new Vector2(-1, 0), 0.2f, LayerMask.NameToLayer("Ground"));
+    //     //检测玩家B是否在墙边
+    //     bool isPlayerAOnwallL= Raycast(playerA.transform.position - new Vector3(-0.55f, 0.0f, 0.0f), new Vector2(1, 0), 0.2f, LayerMask.NameToLayer("Ground"));
+    //     bool isPlayerAOnwallR = Raycast(playerA.transform.position - new Vector3(0.55f, 0.0f, 0.0f), new Vector2(-1, 0), 0.2f, LayerMask.NameToLayer("Ground"));
 
-        if ((isPlayerBOnwallL||isPlayerBOnwallR)&&Input.GetKey(KeyCode.M))
-        {
-            // rigidbody2DPlayerB.AddForceAtPosition(new Vector2(RightForce*100, 0.0f), playerB.transform.position, ForceMode2D.Force);
-
-
-            rigidbody2DPlayerB.constraints = RigidbodyConstraints2D.FreezePosition;
-
-        }
-        else
-        {
-
-            rigidbody2DPlayerB.constraints = RigidbodyConstraints2D.None;
-
-        }
-        if ((isPlayerAOnwallL||isPlayerAOnwallR)&&Input.GetKey(KeyCode.V))
-        {
-            // rigidbody2DPlayerB.AddForceAtPosition(new Vector2(RightForce*100, 0.0f), playerB.transform.position, ForceMode2D.Force);
+    //     if ((isPlayerBOnwallL||isPlayerBOnwallR)&&Input.GetKey(KeyCode.M))
+    //     {
+    //         // rigidbody2DPlayerB.AddForceAtPosition(new Vector2(RightForce*100, 0.0f), playerB.transform.position, ForceMode2D.Force);
 
 
-            rigidbody2DPlayerA.constraints = RigidbodyConstraints2D.FreezePosition;
+    //         rigidbody2DPlayerB.constraints = RigidbodyConstraints2D.FreezePosition;
 
-        }
-        else
-        {
+    //     }
+    //     else
+    //     {
 
-            rigidbody2DPlayerA.constraints = RigidbodyConstraints2D.None;
+    //         rigidbody2DPlayerB.constraints = RigidbodyConstraints2D.None;
 
-        }
+    //     }
+    //     if ((isPlayerAOnwallL||isPlayerAOnwallR)&&Input.GetKey(KeyCode.V))
+    //     {
+    //         // rigidbody2DPlayerB.AddForceAtPosition(new Vector2(RightForce*100, 0.0f), playerB.transform.position, ForceMode2D.Force);
+
+
+    //         rigidbody2DPlayerA.constraints = RigidbodyConstraints2D.FreezePosition;
+
+    //     }
+    //     else
+    //     {
+
+    //         rigidbody2DPlayerA.constraints = RigidbodyConstraints2D.None;
+
+    //     }
 
 
 
-    }
+    // }
     // 射线检测:
     // 从球下方发射一个射线检测是否能起跳, 参数分别是:
     // 发射点
@@ -410,9 +380,5 @@ public class Combination : MonoBehaviour
         }
         return hit;
     }
-
-
-
-
 
 }
