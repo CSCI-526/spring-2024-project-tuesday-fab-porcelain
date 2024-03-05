@@ -319,12 +319,22 @@ public class Combination : MonoBehaviour
 
     void hookHandler()
     {
-        //检测玩家B是否在墙边
-        bool isPlayerBOnwallL= Raycast(playerB.transform.position - new Vector3(-0.55f, 0.0f, 0.0f), new Vector2(1, 0), 0.2f, LayerMask.NameToLayer("Ground"));
-        bool isPlayerBOnwallR = Raycast(playerB.transform.position - new Vector3(0.55f, 0.0f, 0.0f), new Vector2(-1, 0), 0.2f, LayerMask.NameToLayer("Ground"));
-        //检测玩家B是否在墙边
-        bool isPlayerAOnwallL= Raycast(playerA.transform.position - new Vector3(-0.55f, 0.0f, 0.0f), new Vector2(1, 0), 0.2f, LayerMask.NameToLayer("Ground"));
-        bool isPlayerAOnwallR = Raycast(playerA.transform.position - new Vector3(0.55f, 0.0f, 0.0f), new Vector2(-1, 0), 0.2f, LayerMask.NameToLayer("Ground"));
+
+
+        // 检测玩家B是否在墙边
+        RaycastHit2D hit0 = Raycast(playerB.transform.position - new Vector3(-0.55f, 0.0f, 0.0f), new Vector2(1, 0), 0.2f, -1);
+        bool isPlayerBOnwallL = IsOnWall(hit0);
+
+        RaycastHit2D hit1 = Raycast(playerB.transform.position - new Vector3(0.55f, 0.0f, 0.0f), new Vector2(-1, 0), 0.2f, -1);
+        bool isPlayerBOnwallR = IsOnWall(hit1);
+
+        // 检测玩家A是否在墙边
+        RaycastHit2D hit2 = Raycast(playerA.transform.position - new Vector3(-0.55f, 0.0f, 0.0f), new Vector2(1, 0), 0.2f, -1);
+        bool isPlayerAOnwallL = IsOnWall(hit2);
+
+        RaycastHit2D hit3 = Raycast(playerA.transform.position - new Vector3(0.55f, 0.0f, 0.0f), new Vector2(-1, 0), 0.2f, -1);
+        bool isPlayerAOnwallR = IsOnWall(hit3);
+
 
         if ((isPlayerBOnwallL||isPlayerBOnwallR)&&Input.GetKey(KeyCode.M))
         {
@@ -354,6 +364,21 @@ public class Combination : MonoBehaviour
             rigidbody2DPlayerA.constraints = RigidbodyConstraints2D.None;
 
         }
+    }
+
+     //检测玩家是否接触到墙
+    bool IsOnWall(RaycastHit2D hit)
+    {
+        if (hit != null){
+            if(hit.collider!=null){
+                if( hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground")){
+                    return true;
+                }
+            }
+            
+        }
+       
+        return false;
     }
 
 
