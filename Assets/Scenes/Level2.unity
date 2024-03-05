@@ -1449,9 +1449,9 @@ MonoBehaviour:
   playerAPosition: {x: 0, y: 0, z: 0}
   playerBPosition: {x: 0, y: 0, z: 0}
   GripForce: -200
-  LeftForce: -17
-  RightForce: 17
-  jumpForce: 750
+  LeftForce: -25
+  RightForce: 25
+  jumpForce: 720
   lineRenderer: {fileID: 1558030022}
   isPlayerAOnGround: 0
   isPlayerBOnGround: 0

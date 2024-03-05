@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Unity.Collections;
 using Unity.VisualScripting;
-using UnityEditor.SceneManagement;
+// using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Combination : MonoBehaviour
 {
-    
+
     public GameObject playerA;
     public GameObject playerB;
     // 显示两个小球的位置, 调试用
@@ -55,7 +55,8 @@ public class Combination : MonoBehaviour
 
     void Update()
     {
-        if(flagSlowMode) {
+        if (flagSlowMode)
+        {
             Time.timeScale = 0.001f;
         }
         else
@@ -88,9 +89,10 @@ public class Combination : MonoBehaviour
 
 
     //转换到棍子
-    void switchToStick() {
+    void switchToStick()
+    {
         //模拟木头颜色
-        Color stickColor = new Color(0.72f, 0.52f, 0.04f, 1f); 
+        Color stickColor = new Color(0.72f, 0.52f, 0.04f, 1f);
         lineRenderer.startColor = stickColor;
         lineRenderer.endColor = stickColor;
 
@@ -98,7 +100,7 @@ public class Combination : MonoBehaviour
         playerB.SetActive(false);
         stick.SetActive(false);
 
-       
+
         var xOffset = Mathf.Cos(playerA.transform.rotation.eulerAngles.z * Mathf.PI / 180) * 4;
 
         var yOffset = Mathf.Sin(playerA.transform.rotation.eulerAngles.z * Mathf.PI / 180) * 4;
@@ -135,9 +137,10 @@ public class Combination : MonoBehaviour
     }
 
     //转换到绳子
-    void switchToRope() {
+    void switchToRope()
+    {
         // 模拟绳子颜色
-        Color ropeColor = new Color(0.9f, 0.85f, 0.5f, 1f); 
+        Color ropeColor = new Color(0.9f, 0.85f, 0.5f, 1f);
         lineRenderer.startColor = ropeColor;
         lineRenderer.endColor = ropeColor;
 
@@ -152,9 +155,10 @@ public class Combination : MonoBehaviour
     }
 
     //转换到弹簧
-    void SwitchToSpring() {
+    void SwitchToSpring()
+    {
         // 模拟金属颜色
-        Color springColor = new Color(0.75f, 0.75f, 0.8f, 1f); 
+        Color springColor = new Color(0.75f, 0.75f, 0.8f, 1f);
         lineRenderer.startColor = springColor;
         lineRenderer.endColor = springColor;
 
@@ -170,28 +174,33 @@ public class Combination : MonoBehaviour
         playerB.GetComponent<SpringJoint2D>().distance = 4;
     }
 
-    void handleSwitch() {
+    void handleSwitch()
+    {
         //检测空格键
-        if(Input.GetKeyDown(KeyCode.Space)) {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
             //A在平台上,B在平台下阻止切换棍子和弹簧
-            if(connectorIndex == 1) {
+            if (connectorIndex == 1)
+            {
                 var direction = (playerA.transform.position - playerB.transform.position).normalized;
                 var raycastHit2D = Raycast(
-                    playerA.transform.position - direction * 0.55f, 
-                    -direction, 
-                    Vector2.Distance(playerA.transform.position, playerB.transform.position) - 1.10f, 
+                    playerA.transform.position - direction * 0.55f,
+                    -direction,
+                    Vector2.Distance(playerA.transform.position, playerB.transform.position) - 1.10f,
                     LayerMask.NameToLayer("Ground")
                 );
 
-                if(raycastHit2D) {
-                    return ;
+                if (raycastHit2D)
+                {
+                    return;
                 }
             }
 
             connectorIndex += 1;
             connectorIndex %= 3;
             //根据索引切换连接模式
-            switch(connectorIndex) {
+            switch (connectorIndex)
+            {
                 case 0: switchToStick(); break;
                 case 1: switchToRope(); break;
                 case 2: SwitchToSpring(); break;
@@ -206,28 +215,28 @@ public class Combination : MonoBehaviour
         // 当A键 按下时, 给playerA的位置施加一个X 轴上的-5 单位的力
         if (Input.GetKey(KeyCode.A))
         {
-            
+
             rigidbody2DPlayerA.AddForceAtPosition(new Vector2(LeftForce, 0.0f), playerA.transform.position, ForceMode2D.Force);
         }
 
         // 当D键 按下时, 给playerBlue 的位置施加一个X 轴上的5 单位的力
         if (Input.GetKey(KeyCode.D))
         {
-                        
+
             rigidbody2DPlayerA.AddForceAtPosition(new Vector2(RightForce, 0.0f), playerA.transform.position, ForceMode2D.Force);
         }
 
         // 当左箭头 按下时, 给playerB的位置施加一个X 轴上的-5 单位的力
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-                        
+
             rigidbody2DPlayerB.AddForceAtPosition(new Vector2(LeftForce, 0.0f), playerB.transform.position, ForceMode2D.Force);
         }
 
         // 当右箭头 按下时, 给playerB 的位置施加一个X 轴上的5 单位的力
         if (Input.GetKey(KeyCode.RightArrow))
         {
-                        
+
             rigidbody2DPlayerB.AddForceAtPosition(new Vector2(RightForce, 0.0f), playerB.transform.position, ForceMode2D.Force);
         }
     }
@@ -336,7 +345,7 @@ public class Combination : MonoBehaviour
         bool isPlayerAOnwallR = IsOnWall(hit3);
 
 
-        if ((isPlayerBOnwallL||isPlayerBOnwallR)&&Input.GetKey(KeyCode.M))
+        if ((isPlayerBOnwallL || isPlayerBOnwallR) && Input.GetKey(KeyCode.M))
         {
             // rigidbody2DPlayerB.AddForceAtPosition(new Vector2(RightForce*100, 0.0f), playerB.transform.position, ForceMode2D.Force);
 
@@ -350,7 +359,7 @@ public class Combination : MonoBehaviour
             rigidbody2DPlayerB.constraints = RigidbodyConstraints2D.None;
 
         }
-        if ((isPlayerAOnwallL||isPlayerAOnwallR)&&Input.GetKey(KeyCode.V))
+        if ((isPlayerAOnwallL || isPlayerAOnwallR) && Input.GetKey(KeyCode.V))
         {
             // rigidbody2DPlayerB.AddForceAtPosition(new Vector2(RightForce*100, 0.0f), playerB.transform.position, ForceMode2D.Force);
 
@@ -366,18 +375,21 @@ public class Combination : MonoBehaviour
         }
     }
 
-     //检测玩家是否接触到墙
+    //检测玩家是否接触到墙
     bool IsOnWall(RaycastHit2D hit)
     {
-        if (hit != null){
-            if(hit.collider!=null){
-                if( hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground")){
+        if (hit != null)
+        {
+            if (hit.collider != null)
+            {
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+                {
                     return true;
                 }
             }
-            
+
         }
-       
+
         return false;
     }
 
