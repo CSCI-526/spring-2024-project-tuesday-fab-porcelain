@@ -9,9 +9,11 @@ public class Trick1 : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        scaleChange = new Vector3(-wall.transform.localScale.x / 2, 0.0f, 0.0f);
-        positionChange = new Vector3(0.0f, -wall.transform.localScale.x / 4, 0.0f);
-        wall.transform.localScale += scaleChange;
-        wall.transform.localPosition += positionChange;
+        if(wall.transform.localScale.x > 4){
+            scaleChange = new Vector3(-wall.transform.localScale.x / 2, 0.0f, 0.0f);
+            positionChange = new Vector3(0.0f, -wall.transform.localScale.x / 4, 0.0f);
+            wall.transform.localScale += scaleChange;
+            wall.transform.localPosition += positionChange;
+        }
     }
 }

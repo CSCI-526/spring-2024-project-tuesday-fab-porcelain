@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 3093729421758020697}
   - component: {fileID: 3363193102944396297}
-  - component: {fileID: 5299823114523817526}
-  - component: {fileID: -5200801873902122851}
+  - component: {fileID: -3909596412618350831}
+  - component: {fileID: 743680626587602036}
   m_Layer: 0
   m_Name: Rod
-  m_TagString: Untagged
+  m_TagString: Combination
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!50 &5299823114523817526
+--- !u!50 &-3909596412618350831
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -113,7 +113,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!61 &-5200801873902122851
+--- !u!61 &743680626587602036
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

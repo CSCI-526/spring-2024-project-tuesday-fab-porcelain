@@ -5,7 +5,7 @@ using UnityEngine;
 public class Move : MonoBehaviour
 {
     //设置小平台上下移动的 起点/终点
-    public Vector3 pointDown = new Vector3(14.4f, -11.89f, 0);
+    public Vector3 pointDown = new Vector3(14.4f, -5.0f, 0);
     public Vector3 pointUpper = new Vector3(14.4f, 9.63f, 0);
     //平台速度
     public float speed = 2.0f;
