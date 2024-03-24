@@ -382,7 +382,7 @@ public class Combination : MonoBehaviour
                     // 否则应用正常跳跃力
                     rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerA.transform.position, ForceMode2D.Force);
 
-                    print("A");
+                    // print("A");
                 }
             }
         }
@@ -418,7 +418,7 @@ public class Combination : MonoBehaviour
                 {
                     // 否则应用正常跳跃力
                     rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerB.transform.position, ForceMode2D.Force);
-                    print("B");
+                    // print("B");
                   
                 }
             }
