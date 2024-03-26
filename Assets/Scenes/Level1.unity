@@ -39005,11 +39005,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7214209742145015032, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: LeftForce
-      value: -30
+      value: -45
+      objectReference: {fileID: 0}
+    - target: {fileID: 7214209742145015032, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
+      propertyPath: jumpForce
+      value: 900
       objectReference: {fileID: 0}
     - target: {fileID: 7214209742145015032, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: RightForce
-      value: 30
+      value: 45
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
