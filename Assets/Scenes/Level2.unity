@@ -4075,9 +4075,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4976609551061820039, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
+      propertyPath: m_TagString
+      value: Combination
+      objectReference: {fileID: 0}
     - target: {fileID: 5946959835655325533, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: m_Name
-      value: Combination (1)
+      value: Combination
+      objectReference: {fileID: 0}
+    - target: {fileID: 6369320500088683644, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
+      propertyPath: m_TagString
+      value: Combination
       objectReference: {fileID: 0}
     - target: {fileID: 7214209742145015032, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: LeftForce

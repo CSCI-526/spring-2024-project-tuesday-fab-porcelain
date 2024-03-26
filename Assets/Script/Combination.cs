@@ -6,7 +6,6 @@ using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-
 public class Combination : MonoBehaviour
 {
 
@@ -22,7 +21,9 @@ public class Combination : MonoBehaviour
     // 右边力
     public float RightForce = 10f;
     // 起跳力度
-    public float jumpForce = 260f;
+    public float jumpForce = 260f; 
+    // 最大速度
+    public float maxspeed = 20f; 
     // 刚体
     Rigidbody2D rigidbody2DPlayerA;
     Rigidbody2D rigidbody2DPlayerB;
@@ -327,29 +328,34 @@ public class Combination : MonoBehaviour
 
     void MoveHandler()
     {
-        // 当A键 按下时, 给playerA的位置施加一个X 轴上的-5 单位的力
-        if (Input.GetKey(KeyCode.A))
-        {
-            rigidbody2DPlayerA.AddForceAtPosition(new Vector2(LeftForce, 0.0f), playerA.transform.position, ForceMode2D.Force);
-        }
+        float horizontalSpeed = rigidbody2DPlayerA.velocity.x;
+        if ( Math.Abs(horizontalSpeed)<maxspeed){
+                // 当A键 按下时, 给playerA的位置施加一个X 轴上的-5 单位的力
+            if (Input.GetKey(KeyCode.A))
+            {
+                rigidbody2DPlayerA.AddForceAtPosition(new Vector2(LeftForce, 0.0f), playerA.transform.position, ForceMode2D.Force);
+            }
 
-        // 当D键 按下时, 给playerBlue 的位置施加一个X 轴上的5 单位的力
-        if (Input.GetKey(KeyCode.D))
-        {
-            rigidbody2DPlayerA.AddForceAtPosition(new Vector2(RightForce, 0.0f), playerA.transform.position, ForceMode2D.Force);
-        }
+            // 当D键 按下时, 给playerBlue 的位置施加一个X 轴上的5 单位的力
+            if (Input.GetKey(KeyCode.D))
+            {
+                rigidbody2DPlayerA.AddForceAtPosition(new Vector2(RightForce, 0.0f), playerA.transform.position, ForceMode2D.Force);
+            }
 
-        // 当左箭头 按下时, 给playerB的位置施加一个X 轴上的-5 单位的力
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            rigidbody2DPlayerB.AddForceAtPosition(new Vector2(LeftForce, 0.0f), playerB.transform.position, ForceMode2D.Force);
-        }
+            // 当左箭头 按下时, 给playerB的位置施加一个X 轴上的-5 单位的力
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                rigidbody2DPlayerB.AddForceAtPosition(new Vector2(LeftForce, 0.0f), playerB.transform.position, ForceMode2D.Force);
+            }
 
-        // 当右箭头 按下时, 给playerB 的位置施加一个X 轴上的5 单位的力
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            rigidbody2DPlayerB.AddForceAtPosition(new Vector2(RightForce, 0.0f), playerB.transform.position, ForceMode2D.Force);
+            // 当右箭头 按下时, 给playerB 的位置施加一个X 轴上的5 单位的力
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                rigidbody2DPlayerB.AddForceAtPosition(new Vector2(RightForce, 0.0f), playerB.transform.position, ForceMode2D.Force);
+            }
+          
         }
+       
     }
 
     void JumpHandler()
