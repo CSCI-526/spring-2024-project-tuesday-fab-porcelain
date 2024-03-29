@@ -11,10 +11,10 @@ public class prompt1Controller : MonoBehaviour
     public float loc1ymax;
 
 
-    public float loc2xmin;
-    public float loc2xmax;
-    public float loc2ymin;
-    public float loc2ymax;
+    // public float loc2xmin;
+    // public float loc2xmax;
+    // public float loc2ymin;
+    // public float loc2ymax;
 
 
     private TextMeshProUGUI promptText;
@@ -56,11 +56,11 @@ public class prompt1Controller : MonoBehaviour
         {
             return true;
         }
-        if (playerAPosition.x >= loc2xmin && playerAPosition.x <= loc2xmax && 
-            playerAPosition.y >= loc2ymin && playerAPosition.y <= loc2ymax)
-        {
-            return true;
-        }
+        // if (playerAPosition.x >= loc2xmin && playerAPosition.x <= loc2xmax && 
+        //     playerAPosition.y >= loc2ymin && playerAPosition.y <= loc2ymax)
+        // {
+        //     return true;
+        // }
 
         return false;
 
