@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Unity.Collections;
 using Unity.VisualScripting;
-using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 public class Combination : MonoBehaviour
 {
