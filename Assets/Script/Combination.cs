@@ -14,15 +14,21 @@ public class Combination : MonoBehaviour
     public GameObject playerB;
     // 显示两个小球的位置, 调试用
     public Vector3 playerAPosition;
-    public Vector3 playerBPosition;
-    // 抓地力度
-    public float GripForce = -200f;
+    public Vector3 playerBPosition; 
     // 左边力
     public float LeftForce = -10f;
     // 右边力
     public float RightForce = 10f;
     // 起跳力度
     public float jumpForce = 260f;
+
+    public Face AFace;
+    public Face BFace;
+
+    private float aDownPressTime;
+    private float bDownPressTime;
+     
+    public float jumpMaxTimes = 3;
     // 刚体
     Rigidbody2D rigidbody2DPlayerA;
     Rigidbody2D rigidbody2DPlayerB;
@@ -30,19 +36,12 @@ public class Combination : MonoBehaviour
     public LineRenderer lineRenderer;
     //存储AB之间的距离
     public float distanceAB = 0.0f;
-    ////存储抛物线方程
-    //public double[] abc = new double[] { 0, 0, 0 };
-    //关节对象&绳子起点&终点对象
-    public GameObject articulation;
-    GameObject ropeStart;
-    GameObject ropeEnd;
 
-    //~~~~~~
-    //public GameObject stick;
-
-    public Transform stick;
+    public Vector2 speedLimitA;
+    public Vector2 speedLimitB;
 
 
+    public float fallSpeed = 10;
     List<GameObject> ropeParts = new List<GameObject>();
 
     // 判断小球是否在地面上,从而决定是否能够起跳
@@ -51,9 +50,7 @@ public class Combination : MonoBehaviour
     // 画出射线检测的调试线
     bool drawDebugLine = true;
     //连接物索引
-    public int connectorIndex = 0;
-    [SerializeField] private GameObject combinationPrefab;
-
+    public int connectorIndex = 0; 
 
 
     void Start()
@@ -158,8 +155,29 @@ public class Combination : MonoBehaviour
 
         rigidbody2DPlayerA.centerOfMass=Vector3.zero;
         rigidbody2DPlayerB.centerOfMass = Vector3.zero;
+
+
+        SpeedLimit();
+
+
+        Physics2D.gravity = new Vector2(0, -fallSpeed);
     }
 
+    void SpeedLimit()
+    {
+        Vector2 aVel = rigidbody2DPlayerA.velocity;
+        Vector2 bVel = rigidbody2DPlayerB.velocity;
+
+        aVel.x = Mathf.Clamp(aVel.x, -speedLimitA.x, speedLimitA.x);
+        aVel.y = Mathf.Clamp(aVel.y, -speedLimitA.y, speedLimitA.y);
+
+        rigidbody2DPlayerA.velocity = aVel;
+
+        bVel.x = Mathf.Clamp(bVel.x, -speedLimitB.x, speedLimitB.x);
+        bVel.y = Mathf.Clamp(bVel.y, -speedLimitB.y, speedLimitB.y);
+
+        rigidbody2DPlayerB.velocity = bVel;
+    }
     public GameObject stickCollider;
     //转换到棍子
     void switchToStick()
@@ -187,51 +205,7 @@ public class Combination : MonoBehaviour
         playerB.GetComponent<SpringJoint2D>().enabled = false;
 
     }
-    //构建连接体
-    void makeRope()
-    {
-        GameObject lastPart = null;
-        for (int i = 0; i < 16; i++)
-        {
-            //创建预制体实例,把单个绳子单个部件给part
-            GameObject part = Instantiate(articulation);
-            //给部件添加物理约束
-            part.AddComponent<DistanceJoint2D>();
-
-            //测试~~~~~~~~~~~~~~
-            //part.AddComponent<Rigidbody2D>();
-            //part.AddComponent<BoxCollider2D>();
-
-
-            //设置重力为0.01&受重力影响0.1
-            part.GetComponent<Rigidbody2D>().mass = 0.01f;
-            part.GetComponent<Rigidbody2D>().gravityScale = 0.1f;
-
-            if (lastPart == null)
-            {
-                lastPart = part;
-            }
-
-            if (i == 0)
-            {
-                ropeStart = part;
-            }
-            if (i == 15)
-            {
-                ropeEnd = part;
-            }
-            //配置部件连接
-            if (i != 0)
-            {
-                DistanceJoint2D partJoint = lastPart.GetComponent<DistanceJoint2D>();
-                partJoint.autoConfigureDistance = false;
-                partJoint.distance = 0.25f;
-                partJoint.connectedBody = part.GetComponent<Rigidbody2D>();
-            }
-            ropeParts.Add(part);
-            lastPart = part;
-        }
-    }
+   
 
     //转换到绳子
     void switchToRope()
@@ -256,12 +230,7 @@ public class Combination : MonoBehaviour
         playerB.GetComponent<DistanceJoint2D>().maxDistanceOnly = true;
         playerB.GetComponent<SpringJoint2D>().enabled = false;
 
-
-        foreach (var item in ropeParts)
-        {
-            //item.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-            //item.GetComponent<Rigidbody2D>().angularVelocity = 0;
-        }
+         
     }
 
     //转换到弹簧
@@ -284,25 +253,9 @@ public class Combination : MonoBehaviour
         playerB.GetComponent<SpringJoint2D>().enabled = true;
         playerB.GetComponent<SpringJoint2D>().distance = 4;
     }
-    //抛物线逻辑 y=ax2 + bx + c 求b,c
-    double[] getParabola(float a, float x1, float y1, float x2, float y2)
-    {
-        double b = ((y2 - y1) - (a * (x2 * x2 - x1 * x1))) / (x2 - x1);
-        double c = y1 - a * x1 * x1 - b * x1;
-
-        return new double[] { b, c };
-    }
-    //抛物线逻辑 y = ax2 + bx + c 求 y
-    double getY(double a, double b, double c, double x)
-    {
-        return x * x * a + x * b + c;
-    }
-
-
+   
     void CombinationSwitch()
-    {
-
-
+    { 
         if (connectorIndex == 1 || connectorIndex ==2)
         {
             if (Physics2D.Linecast(playerA.transform.position, playerB.transform.position, LayerMask.GetMask("Ground")))
@@ -352,88 +305,83 @@ public class Combination : MonoBehaviour
         }
     }
 
+    private bool aGroundDown;
+    private bool bGroundDown;
     void JumpHandler()
     {
         //检测玩家是否在地面上,决定是否能够起跳
-        //isPlayerBOnGround = Raycast(playerB.transform.position - new Vector3(0.0f, 0.55f, 0.0f), new Vector2(0, -1), 0.2f, LayerMask.NameToLayer("Ground"));
-        //isPlayerAOnGround = Raycast(playerA.transform.position - new Vector3(0.0f, 0.55f, 0.0f), new Vector2(0, -1), 0.2f, LayerMask.NameToLayer("Ground"));
         isPlayerBOnGround = Physics2D.RaycastAll(playerB.transform.position - new Vector3(0.0f, 0.55f, 0.0f), new Vector2(0, -1), 0.2f, LayerMask.GetMask("Ground")).Length > 0;
         isPlayerAOnGround = Physics2D.RaycastAll(playerA.transform.position - new Vector3(0.0f, 0.55f, 0.0f), new Vector2(0, -1), 0.2f, LayerMask.GetMask("Ground")).Length > 0;
         playerAPosition = playerA.transform.position;
         playerBPosition = playerB.transform.position;
-
-        // 当W 松开时, 给playerA 的位置施加一个Y 轴上的150 单位的力
-        if (Input.GetKeyUp(KeyCode.W))
-        {
-            if (isPlayerAOnGround)
+         
+        if (isPlayerAOnGround)
+        { 
+            // 当W 松开时, 给playerA 的位置施加一个Y 轴上的150 单位的力
+            if (Input.GetKeyUp(KeyCode.W))
             {
-                // 计算小球B和小球A在X轴上的差值
-                float horiDiff = playerB.transform.position.x - playerA.transform.position.x;
+                rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerA.transform.position, ForceMode2D.Impulse);
+            }
 
-                // 检查小球B是否在小球A的正上方
-                // 并且小球B和小球A在X轴上的差值绝对值在1以内
-                if (playerB.transform.position.y > playerA.transform.position.y && Mathf.Abs(horiDiff) <= 1)
-                {
-                    // 如果小球B在上方且小球A在地面上，则应用2倍跳跃力
-                    rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce * 2), playerA.transform.position, ForceMode2D.Force);
-                }
-                else
-                {
-                    // 否则应用正常跳跃力
-                    rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerA.transform.position, ForceMode2D.Force);
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                aDownPressTime = Time.time;
+                aGroundDown = true;
 
-                    print("A");
-                }
+            }
+            if (Input.GetKey(KeyCode.S) && aGroundDown)
+            {
+                float time = Time.time - aDownPressTime; 
+                AFace.SetFaceRed(Mathf.Clamp01(time / 3));
+            }
+            if (Input.GetKeyUp(KeyCode.S) && aGroundDown)
+            {
+                float time = Time.time- aDownPressTime;
+                float times =Mathf.Clamp01( time / 3) *jumpMaxTimes;
+                 
+                rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, times* jumpForce), playerA.transform.position, ForceMode2D.Impulse);
+                AFace.SetFaceRed(0);
             }
         }
-
-        // 当S 松开时, 给playerA 的位置施加一个Y 轴上 一个向下 GripForce 单位的力
-        if (Input.GetKeyUp(KeyCode.S))
-        {   //下面代码如果抓地力太大可以取消索引
-            //if (isPlayerAOnGround)
-            //{
-            //    rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerA.transform.position, ForceMode2D.Force);
-            //}
-            //一个在上一个在下的时候增加的跳跃力
-
-            rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, GripForce), playerA.transform.position, ForceMode2D.Force);
+        else
+        {
+            aGroundDown = false;
+            AFace.SetFaceRed(0);
         }
 
         // 当上箭头 松开时, 给playerB 的位置施加一个Y 轴上的150 单位的力
-        if (Input.GetKeyUp(KeyCode.UpArrow))
-        {
-            if (isPlayerBOnGround)
-            {
-                // 计算小球B和小球A在X轴上的差值
-                float horiDiff = playerB.transform.position.x - playerA.transform.position.x;
 
-                // 检查小球B是否在小球A的正下方
-                // 并且小球B和小球A在X轴上的差值绝对值在1以内
-                if (playerB.transform.position.y < playerA.transform.position.y && Mathf.Abs(horiDiff) <= 1)
-                {
-                    // 如果小球B在下方且小球B在地面上，则应用2倍跳跃力
-                    rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, jumpForce * 2), playerB.transform.position, ForceMode2D.Force);
-                }
-                else
-                {
-                    // 否则应用正常跳跃力
-                    rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerB.transform.position, ForceMode2D.Force);
-                    print("B");
-                  
-                }
+        if (isPlayerBOnGround)
+        {
+            if (Input.GetKeyUp(KeyCode.UpArrow))
+            {
+                // 否则应用正常跳跃力
+                rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerB.transform.position, ForceMode2D.Impulse);
+            }
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                bDownPressTime = Time.time;
+                bGroundDown = true;
+            }
+            if (Input.GetKey(KeyCode.DownArrow) && bGroundDown)
+            {
+                float time = Time.time - bDownPressTime;
+                BFace.SetFaceRed(Mathf.Clamp01(time / 3));
+            }
+            if (Input.GetKeyUp(KeyCode.DownArrow) &&bGroundDown)
+            {
+                float time = Time.time - bDownPressTime;
+                float times = Mathf.Clamp01(time / 3) * jumpMaxTimes;
+                rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, times * jumpForce), playerB.transform.position, ForceMode2D.Impulse);
+                BFace.SetFaceRed(0);
             }
         }
-        // 当下箭头 松开时, 给playerB 的位置施加一个Y 轴上一个向下 GripForce 单位的力
-        if (Input.GetKeyUp(KeyCode.DownArrow))
+        else
         {
-            //下面代码如果抓地力太大可以取消索引
-            //if (isPlayerBOnGround)
-            //{
-            //    rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerB.transform.position, ForceMode2D.Force);
-            //}
-            rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, GripForce), playerB.transform.position, ForceMode2D.Force);
-
+            bGroundDown = false;
+            BFace.SetFaceRed(0);
         }
+
 
     }
 
