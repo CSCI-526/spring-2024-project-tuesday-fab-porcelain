@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
@@ -14,7 +15,16 @@ public class Combination : MonoBehaviour
     public GameObject playerB;
     // 显示两个小球的位置, 调试用
     public Vector3 playerAPosition;
-    public Vector3 playerBPosition; 
+    public Vector3 playerBPosition;
+
+    //用于统计材质使用次数
+    public int stickUsageCount = 0;
+    public int ropeUsageCount = 0;
+    public int springUsageCount = 0;
+
+    private string csvFilePath = Path.Combine(Application.dataPath, "Data", "MaterialCountData.csv");
+
+
     // 左边力
     public float LeftForce = -10f;
     // 右边力
@@ -55,11 +65,20 @@ public class Combination : MonoBehaviour
 
     void Start()
     {
+        csvFilePath = Path.Combine(Application.dataPath, "Data", "MaterialCountData.csv");
         //初始化玩家A&B; 初始化绘制连接线LineRenderer
         rigidbody2DPlayerA = playerA.GetComponent<Rigidbody2D>();
         rigidbody2DPlayerB = playerB.GetComponent<Rigidbody2D>();
         lineRenderer = playerA.GetComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
+
+        ////因为最开始是使用木棍，所以木棍的使用次数初始就为1
+        //Debug.Log("Stick Usage Count: " + stickUsageCount + " | Rope Usage Count: " + ropeUsageCount + " | Spring Usage Count: " + springUsageCount);
+        stickUsageCount = 1;
+        Debug.Log("Stick Usage Count: " + stickUsageCount + " | Rope Usage Count: " + ropeUsageCount + " | Spring Usage Count: " + springUsageCount);
+
+        
+
         //调用切换功能,初始调用棍子链接
         CombinationSwitch();
         switchToStick();
@@ -79,6 +98,8 @@ public class Combination : MonoBehaviour
 
         lineRenderer.SetPosition(0, playerA.transform.position);
         lineRenderer.SetPosition(1, playerB.transform.position);
+
+        
     }
     void hookHandler()
     {
@@ -270,10 +291,12 @@ public class Combination : MonoBehaviour
 
             switch (connectorIndex)
             {
-                case 0: switchToStick(); break;
-                case 1: switchToRope(); break;
-                case 2: SwitchToSpring(); break;
+                case 0: stickUsageCount++; switchToStick(); break;
+                case 1: ropeUsageCount++; switchToRope(); break;
+                case 2: springUsageCount++; SwitchToSpring(); break;
             }
+            // 输出统计结果到控制台
+            Debug.Log("Stick Usage Count: " + stickUsageCount + " | Rope Usage Count: " + ropeUsageCount + " | Spring Usage Count: " + springUsageCount);
         }
     }
 
@@ -426,5 +449,31 @@ public class Combination : MonoBehaviour
             Debug.DrawRay(sourcePosition, rayDirection * length, color);
         }
         return hit;
+    }
+
+
+    void OnApplicationQuit()
+    {
+        // 游戏结束时统计数据并写入CSV文件
+        WriteStatsToCSV();
+    }
+
+    // 统计数据并写入CSV文件
+    void WriteStatsToCSV()
+    {
+        // 如果文件不存在，则创建并写入列标题
+        if (!File.Exists(csvFilePath))
+        {
+            using (StreamWriter writer = new StreamWriter(csvFilePath, false))
+            {
+                writer.WriteLine("Stick Usage Count,Rope Usage Count,Spring Usage Count");
+            }
+        }
+
+        // 将统计数据写入CSV文件
+        using (StreamWriter writer = new StreamWriter(csvFilePath, true))
+        {
+            writer.WriteLine($"{stickUsageCount},{ropeUsageCount},{springUsageCount}");
+        }
     }
 }
