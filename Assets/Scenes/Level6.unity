@@ -1349,15 +1349,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2373675591737502644, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 0.9254902
       objectReference: {fileID: 0}
     - target: {fileID: 2373675591737502644, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: m_Color.g
-      value: 0
+      value: 0.79607844
       objectReference: {fileID: 0}
     - target: {fileID: 2373675591737502644, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0.9607843
       objectReference: {fileID: 0}
     - target: {fileID: 2461815320083839121, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1416,12 +1416,20 @@ PrefabInstance:
       value: -45
       objectReference: {fileID: 0}
     - target: {fileID: 7214209742145015032, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
+      propertyPath: fallSpeed
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7214209742145015032, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: jumpForce
-      value: 900
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7214209742145015032, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: RightForce
       value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 7214209742145015032, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
+      propertyPath: jumpMaxTimes
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

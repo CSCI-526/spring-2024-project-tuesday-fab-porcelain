@@ -20,7 +20,7 @@ public class Combination : MonoBehaviour
     // 右边力
     public float RightForce = 10f;
     // 起跳力度
-    public float jumpForce = 260f;
+    public float jumpForce = 20f;
 
     public Face AFace;
     public Face BFace;
@@ -320,25 +320,46 @@ public class Combination : MonoBehaviour
             // 当W 松开时, 给playerA 的位置施加一个Y 轴上的150 单位的力
             if (Input.GetKeyUp(KeyCode.W))
             {
-                rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerA.transform.position, ForceMode2D.Impulse);
+                // rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerA.transform.position, ForceMode2D.Impulse);
+             
+                    // 计算小球B和小球A在X轴上的差值
+                    float horiDiff = playerB.transform.position.x - playerA.transform.position.x;
+
+                    // 检查小球B是否在小球A的正上方
+                    // 并且小球B和小球A在X轴上的差值绝对值在1以内
+                    if (playerB.transform.position.y > playerA.transform.position.y && Mathf.Abs(horiDiff) <= 1)
+                    {
+                        // 如果小球B在上方且小球A在地面上，则应用2倍跳跃力
+                        rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce * 2), playerA.transform.position, ForceMode2D.Force);
+                    }
+                    else
+                    {
+                        // 否则应用正常跳跃力
+                        rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerA.transform.position, ForceMode2D.Force);
+
+                        // print("A");
+                    }
+                
+
+
             }
 
-            if (Input.GetKeyDown(KeyCode.S))
+            if (Input.GetKeyDown(KeyCode.W))
             {
                 aDownPressTime = Time.time;
                 aGroundDown = true;
 
             }
             // 按S蓄力跳跃
-            if (Input.GetKey(KeyCode.S) && aGroundDown)
+            if (Input.GetKey(KeyCode.W) && aGroundDown)
             {
                 float time = Time.time - aDownPressTime; 
-                AFace.SetFaceRed(Mathf.Clamp01(time / 3));
+                AFace.SetFaceRed(Mathf.Clamp01(time / 1.5f));
             }
-            if (Input.GetKeyUp(KeyCode.S) && aGroundDown)
+            if (Input.GetKeyUp(KeyCode.W) && aGroundDown)
             {
                 float time = Time.time- aDownPressTime;
-                float times =Mathf.Clamp01( time / 3) *jumpMaxTimes;
+                float times =Mathf.Clamp01( time / 1.5f) *jumpMaxTimes;
                  
                 rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, times* jumpForce), playerA.transform.position, ForceMode2D.Impulse);
                 AFace.SetFaceRed(0);
@@ -359,20 +380,20 @@ public class Combination : MonoBehaviour
                 // 否则应用正常跳跃力
                 rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerB.transform.position, ForceMode2D.Impulse);
             }
-            if (Input.GetKeyDown(KeyCode.DownArrow))
+            if (Input.GetKeyDown(KeyCode.UpArrow))
             {
                 bDownPressTime = Time.time;
                 bGroundDown = true;
             }
-            if (Input.GetKey(KeyCode.DownArrow) && bGroundDown)
+            if (Input.GetKey(KeyCode.UpArrow) && bGroundDown)
             {
                 float time = Time.time - bDownPressTime;
-                BFace.SetFaceRed(Mathf.Clamp01(time / 3));
+                BFace.SetFaceRed(Mathf.Clamp01(time / 1.5f));
             }
-            if (Input.GetKeyUp(KeyCode.DownArrow) &&bGroundDown)
+            if (Input.GetKeyUp(KeyCode.UpArrow) &&bGroundDown)
             {
                 float time = Time.time - bDownPressTime;
-                float times = Mathf.Clamp01(time / 3) * jumpMaxTimes;
+                float times = Mathf.Clamp01(time / 1.5f) * jumpMaxTimes;
                 rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, times * jumpForce), playerB.transform.position, ForceMode2D.Impulse);
                 BFace.SetFaceRed(0);
             }
