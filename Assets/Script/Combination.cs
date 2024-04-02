@@ -316,28 +316,43 @@ public class Combination : MonoBehaviour
         playerBPosition = playerB.transform.position;
          
         if (isPlayerAOnGround)
-        { 
-            // 当W 松开时, 给playerA 的位置施加一个Y 轴上的150 单位的力
-            if (Input.GetKeyUp(KeyCode.W))
+        {
+
+
+            //当W 松开时, 给playerA 的位置施加一个Y 轴上的150 单位的力
+            if (Input.GetKeyUp(KeyCode.W))//!!!!!!!!!!!!!!!!!!!!!    GetKeyUp====》GetKeyDown
             {
-                rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerA.transform.position, ForceMode2D.Impulse);
+
+                // 先计算小球B和小球A在X轴和Y轴上的差值
+                float horiDiff = playerB.transform.position.x - playerA.transform.position.x;
+                float vertDiff = playerB.transform.position.y - playerA.transform.position.y;
+
+                // 判断是否应该应用加倍跳跃力
+                bool shouldApplyBoost = vertDiff > 0 && Mathf.Abs(horiDiff) <= 1;
+
+                // 应用跳跃力，如果满足条件则应用加倍力
+                float appliedForce = shouldApplyBoost ? jumpForce * 3 : jumpForce;
+                rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, appliedForce), playerA.transform.position, ForceMode2D.Impulse);
+
+
+
             }
 
-            if (Input.GetKeyDown(KeyCode.S))
+            if (Input.GetKeyDown(KeyCode.W)) //改成W试一下
             {
                 aDownPressTime = Time.time;
                 aGroundDown = true;
 
             }
-            if (Input.GetKey(KeyCode.S) && aGroundDown)
+            if (Input.GetKey(KeyCode.W) && aGroundDown)   //改成W试一下
             {
                 float time = Time.time - aDownPressTime; 
-                AFace.SetFaceRed(Mathf.Clamp01(time / 3));
+                AFace.SetFaceRed(Mathf.Clamp01(time / 1.5f));
             }
-            if (Input.GetKeyUp(KeyCode.S) && aGroundDown)
+            if (Input.GetKeyUp(KeyCode.W) && aGroundDown)  //改成W试一下
             {
                 float time = Time.time- aDownPressTime;
-                float times =Mathf.Clamp01( time / 3) *jumpMaxTimes;
+                float times =Mathf.Clamp01( time / 1.5f) *jumpMaxTimes;
                  
                 rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, times* jumpForce), playerA.transform.position, ForceMode2D.Impulse);
                 AFace.SetFaceRed(0);
@@ -353,25 +368,37 @@ public class Combination : MonoBehaviour
 
         if (isPlayerBOnGround)
         {
-            if (Input.GetKeyUp(KeyCode.UpArrow))
+            if (Input.GetKeyUp(KeyCode.UpArrow))//!!!!!!!!!!!!!!!!!!!!!    GetKeyUp====》GetKeyDown
             {
-                // 否则应用正常跳跃力
-                rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerB.transform.position, ForceMode2D.Impulse);
+
+                // 先计算小球B和小球A在X轴和Y轴上的差值
+                float horiDiff = playerB.transform.position.x - playerA.transform.position.x;
+                float vertDiff = playerB.transform.position.y - playerA.transform.position.y;
+
+                // 判断是否应该应用加倍跳跃力
+                bool shouldApplyBoost = vertDiff < 0 && Mathf.Abs(horiDiff) <= 1;
+
+                // 应用跳跃力，如果满足条件则应用加倍力
+                float appliedForce = shouldApplyBoost ? jumpForce * 3 : jumpForce;
+                rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, appliedForce), playerB.transform.position, ForceMode2D.Impulse);
+
+
+
             }
-            if (Input.GetKeyDown(KeyCode.DownArrow))
+            if (Input.GetKeyDown(KeyCode.UpArrow))
             {
                 bDownPressTime = Time.time;
                 bGroundDown = true;
             }
-            if (Input.GetKey(KeyCode.DownArrow) && bGroundDown)
+            if (Input.GetKey(KeyCode.UpArrow) && bGroundDown)
             {
                 float time = Time.time - bDownPressTime;
-                BFace.SetFaceRed(Mathf.Clamp01(time / 3));
+                BFace.SetFaceRed(Mathf.Clamp01(time / 1.5f));
             }
-            if (Input.GetKeyUp(KeyCode.DownArrow) &&bGroundDown)
+            if (Input.GetKeyUp(KeyCode.UpArrow) &&bGroundDown)
             {
                 float time = Time.time - bDownPressTime;
-                float times = Mathf.Clamp01(time / 3) * jumpMaxTimes;
+                float times = Mathf.Clamp01(time / 1.5f) * jumpMaxTimes;
                 rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, times * jumpForce), playerB.transform.position, ForceMode2D.Impulse);
                 BFace.SetFaceRed(0);
             }
