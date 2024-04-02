@@ -20,14 +20,14 @@ public class Combination : MonoBehaviour
     // 右边力
     public float RightForce = 10f;
     // 起跳力度
-    public float jumpForce = 20f;
+    public float jumpForce = 220f;
 
     public Face AFace;
     public Face BFace;
 
     private float aDownPressTime;
     private float bDownPressTime;
-    
+     
     public float jumpMaxTimes = 3;
     // 刚体
     Rigidbody2D rigidbody2DPlayerA;
@@ -52,7 +52,7 @@ public class Combination : MonoBehaviour
     //连接物索引
     public int connectorIndex = 0; 
 
-
+    public bool onclimb=false;
     void Start()
     {
         //初始化玩家A&B; 初始化绘制连接线LineRenderer
@@ -105,12 +105,14 @@ public class Combination : MonoBehaviour
 
 
             rigidbody2DPlayerB.constraints = RigidbodyConstraints2D.FreezePosition;
+            onclimb=true;
 
         }
         else
         {
 
             rigidbody2DPlayerB.constraints = RigidbodyConstraints2D.None;
+            onclimb=false;
 
         }
         if ((isPlayerAOnwallL || isPlayerAOnwallR) && Input.GetKey(KeyCode.V))
@@ -119,12 +121,14 @@ public class Combination : MonoBehaviour
 
 
             rigidbody2DPlayerA.constraints = RigidbodyConstraints2D.FreezePosition;
+            onclimb=true;
 
         }
         else
         {
 
             rigidbody2DPlayerA.constraints = RigidbodyConstraints2D.None;
+            onclimb=true;
 
         }
     }
@@ -263,7 +267,7 @@ public class Combination : MonoBehaviour
         }
          
         //按空格切换连接方式
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Y))
         {
             connectorIndex += 1;
             connectorIndex %= 3;
@@ -281,27 +285,35 @@ public class Combination : MonoBehaviour
     void MoveHandler()
     {
         // 当A键 按下时, 给playerA的位置施加一个X 轴上的-5 单位的力
+        float forcescale=1.0f;
+        if (onclimb==true){
+            forcescale=1.5f;
+        }
+        else{
+            forcescale=1.0f;
+        }
         if (Input.GetKey(KeyCode.A))
         {
-            rigidbody2DPlayerA.AddForceAtPosition(new Vector2(LeftForce, 0.0f), playerA.transform.position, ForceMode2D.Force);
+
+            rigidbody2DPlayerA.AddForceAtPosition(new Vector2(LeftForce, 0.0f)*forcescale, playerA.transform.position, ForceMode2D.Force);
         }
 
         // 当D键 按下时, 给playerBlue 的位置施加一个X 轴上的5 单位的力
         if (Input.GetKey(KeyCode.D))
         {
-            rigidbody2DPlayerA.AddForceAtPosition(new Vector2(RightForce, 0.0f), playerA.transform.position, ForceMode2D.Force);
+            rigidbody2DPlayerA.AddForceAtPosition(new Vector2(RightForce, 0.0f)*forcescale, playerA.transform.position, ForceMode2D.Force);
         }
 
         // 当左箭头 按下时, 给playerB的位置施加一个X 轴上的-5 单位的力
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            rigidbody2DPlayerB.AddForceAtPosition(new Vector2(LeftForce, 0.0f), playerB.transform.position, ForceMode2D.Force);
+            rigidbody2DPlayerB.AddForceAtPosition(new Vector2(LeftForce, 0.0f)*forcescale, playerB.transform.position, ForceMode2D.Force);
         }
 
         // 当右箭头 按下时, 给playerB 的位置施加一个X 轴上的5 单位的力
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            rigidbody2DPlayerB.AddForceAtPosition(new Vector2(RightForce, 0.0f), playerB.transform.position, ForceMode2D.Force);
+            rigidbody2DPlayerB.AddForceAtPosition(new Vector2(RightForce, 0.0f)*forcescale, playerB.transform.position, ForceMode2D.Force);
         }
     }
 
@@ -316,47 +328,40 @@ public class Combination : MonoBehaviour
         playerBPosition = playerB.transform.position;
          
         if (isPlayerAOnGround)
-        { 
-            // 当W 松开时, 给playerA 的位置施加一个Y 轴上的150 单位的力
-            if (Input.GetKeyUp(KeyCode.W))
+        {
+
+
+            //当W 松开时, 给playerA 的位置施加一个Y 轴上的150 单位的力
+            if (Input.GetKeyUp(KeyCode.W))//!!!!!!!!!!!!!!!!!!!!!    GetKeyUp====》GetKeyDown
             {
-                // rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerA.transform.position, ForceMode2D.Impulse);
-             
-                    // 计算小球B和小球A在X轴上的差值
-                    float horiDiff = playerB.transform.position.x - playerA.transform.position.x;
 
-                    // 检查小球B是否在小球A的正上方
-                    // 并且小球B和小球A在X轴上的差值绝对值在1以内
-                    if (playerB.transform.position.y > playerA.transform.position.y && Mathf.Abs(horiDiff) <= 1)
-                    {
-                        // 如果小球B在上方且小球A在地面上，则应用2倍跳跃力
-                        rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce * 2), playerA.transform.position, ForceMode2D.Force);
-                    }
-                    else
-                    {
-                        // 否则应用正常跳跃力
-                        rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerA.transform.position, ForceMode2D.Force);
+                // 先计算小球B和小球A在X轴和Y轴上的差值
+                float horiDiff = playerB.transform.position.x - playerA.transform.position.x;
+                float vertDiff = playerB.transform.position.y - playerA.transform.position.y;
 
-                        // print("A");
-                    }
-                
+                // 判断是否应该应用加倍跳跃力
+                bool shouldApplyBoost = vertDiff > 0 && Mathf.Abs(horiDiff) <= 1;
+
+                // 应用跳跃力，如果满足条件则应用加倍力
+                float appliedForce = shouldApplyBoost ? jumpForce * 3 : jumpForce;
+                rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, appliedForce), playerA.transform.position, ForceMode2D.Impulse);
+
 
 
             }
 
-            if (Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKeyDown(KeyCode.W)) //改成W试一下
             {
                 aDownPressTime = Time.time;
                 aGroundDown = true;
 
             }
-            // 按S蓄力跳跃
-            if (Input.GetKey(KeyCode.W) && aGroundDown)
+            if (Input.GetKey(KeyCode.W) && aGroundDown)   //改成W试一下
             {
                 float time = Time.time - aDownPressTime; 
                 AFace.SetFaceRed(Mathf.Clamp01(time / 1.5f));
             }
-            if (Input.GetKeyUp(KeyCode.W) && aGroundDown)
+            if (Input.GetKeyUp(KeyCode.W) && aGroundDown)  //改成W试一下
             {
                 float time = Time.time- aDownPressTime;
                 float times =Mathf.Clamp01( time / 1.5f) *jumpMaxTimes;
@@ -375,10 +380,22 @@ public class Combination : MonoBehaviour
 
         if (isPlayerBOnGround)
         {
-            if (Input.GetKeyUp(KeyCode.UpArrow))
+            if (Input.GetKeyUp(KeyCode.UpArrow))//!!!!!!!!!!!!!!!!!!!!!    GetKeyUp====》GetKeyDown
             {
-                // 否则应用正常跳跃力
-                rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, jumpForce), playerB.transform.position, ForceMode2D.Impulse);
+
+                // 先计算小球B和小球A在X轴和Y轴上的差值
+                float horiDiff = playerB.transform.position.x - playerA.transform.position.x;
+                float vertDiff = playerB.transform.position.y - playerA.transform.position.y;
+
+                // 判断是否应该应用加倍跳跃力
+                bool shouldApplyBoost = vertDiff < 0 && Mathf.Abs(horiDiff) <= 1;
+
+                // 应用跳跃力，如果满足条件则应用加倍力
+                float appliedForce = shouldApplyBoost ? jumpForce * 3 : jumpForce;
+                rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, appliedForce), playerB.transform.position, ForceMode2D.Impulse);
+
+
+
             }
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
