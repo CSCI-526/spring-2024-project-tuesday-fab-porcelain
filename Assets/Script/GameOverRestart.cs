@@ -5,9 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class GameOverRestart : MonoBehaviour
 {
-    public void OnRestartButton()
+    public void OnSelectLevelButton()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene("levelSelection");
+    }
+
+    public void OnContinueButton()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("");
     }
 }

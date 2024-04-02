@@ -27,7 +27,7 @@ public class Combination : MonoBehaviour
 
     private float aDownPressTime;
     private float bDownPressTime;
-     
+    
     public float jumpMaxTimes = 3;
     // 刚体
     Rigidbody2D rigidbody2DPlayerA;
@@ -329,6 +329,7 @@ public class Combination : MonoBehaviour
                 aGroundDown = true;
 
             }
+            // 按S蓄力跳跃
             if (Input.GetKey(KeyCode.S) && aGroundDown)
             {
                 float time = Time.time - aDownPressTime; 
