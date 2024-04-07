@@ -1458,6 +1458,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdfa29aedde1945a6b21bd21fe2bc406, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sN: {fileID: 0}
 --- !u!1 &847223134
 GameObject:
   m_ObjectHideFlags: 0
@@ -1766,7 +1767,7 @@ MonoBehaviour:
   loc1xmax: 40
   loc1ymin: -20
   loc1ymax: 10
-  playerA: {fileID: 0}
+  playerA: {fileID: 3168507}
 --- !u!114 &992565624
 MonoBehaviour:
   m_ObjectHideFlags: 0
