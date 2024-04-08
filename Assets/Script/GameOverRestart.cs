@@ -5,6 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class GameOverRestart : MonoBehaviour
 {
+    public GameObject levelSelector;
+
+    private void Start()
+    {
+        // levelAgent = GetComponentInParent<LevelSelection>();
+        Debug.Log(levelSelector.GetComponent<LevelSelection>().curLevel);
+    }
+
     public void OnSelectLevelButton()
     {
         Time.timeScale = 1;
@@ -14,6 +22,6 @@ public class GameOverRestart : MonoBehaviour
     public void OnContinueButton()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene("");
+        SceneManager.LoadScene(levelSelector.GetComponent<LevelSelection>().curLevel);
     }
 }
