@@ -293,7 +293,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 265}
+  m_AnchoredPosition: {x: -59, y: 213}
   m_SizeDelta: {x: 800, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &9791665
@@ -317,7 +317,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "\n\n\nTo grab the wall:\n\nRed Ball Player: Press 'V' \nGreen Ball Player:
-    Press 'M' \n\nPress left/right to swing higher, grab the wall when you touch
+    Press 'M' \n\nPress left/right to swing higher\nGrab the wall when you touch
     it.\n\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -345,8 +345,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 25
+  m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -412,8 +412,8 @@ MonoBehaviour:
   loc1xmax: 25
   loc1ymin: -17
   loc1ymax: -11
-  loc2xmin: 98
-  loc2xmax: 113
+  loc2xmin: 95
+  loc2xmax: 105
   loc2ymin: -17
   loc2ymax: -10
 --- !u!1001 &10974554
@@ -1748,7 +1748,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -53.703297, y: -126}
+  m_AnchoredPosition: {x: 27.53, y: -122.15}
   m_SizeDelta: {x: 1.2109, y: 2.9953}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &992565623
@@ -1763,10 +1763,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b4162808454c3c4a965b40491095030, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loc1xmin: 10
-  loc1xmax: 40
+  loc1xmin: 105
+  loc1xmax: 115
   loc1ymin: -20
-  loc1ymax: 10
+  loc1ymax: 20
   playerA: {fileID: 3168507}
 --- !u!114 &992565624
 MonoBehaviour:
