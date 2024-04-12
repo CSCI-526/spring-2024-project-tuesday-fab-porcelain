@@ -14,7 +14,7 @@ public class FlagTriggerLevel : MonoBehaviour
         // 检查进入触发器的是不是旗帜
         if (other.gameObject == flag)
         {
-            // Debug.Log("Ball is close to the Flag!");
+            Debug.Log("Ball is close to the Flag!");
             // 这里可以添加你想要的逻辑
             Time.timeScale = 1;
             SceneManager.LoadScene("levelSelection");

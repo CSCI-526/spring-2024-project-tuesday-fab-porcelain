@@ -50,10 +50,11 @@ public class DoubleButtonTrigger : MonoBehaviour
         // Èç¹ûÄãµÄÂß¼­²»ÊÇ»ùÓÚÅö×²Æ÷µÄ£¬ÄãÐèÒªÏàÓ¦ÐÞ¸Ä´Ë´¦µÄÂß¼­
 
         // Èç¹ûÁ½¸ö°´Å¥¶¼±»°´ÏÂ£¬²Å»á¸üÐÂ°´Å¥×´Ì¬
+        // Debug.Log(isFirstButtonPressed);
         if (isFirstButtonPressed && isSecondButtonPressed)
         {
-            isFirstButtonPressed = GameObject.Find("Button1").GetComponent<DoubleButton>().buttonId == 3;
-            isSecondButtonPressed = GameObject.Find("Button2").GetComponent<DoubleButton>().buttonId == 4;
+            isFirstButtonPressed = GameObject.Find("Button1").GetComponent<DoubleButton2>().buttonId == 3;
+            isSecondButtonPressed = GameObject.Find("Button2").GetComponent<DoubleButton2>().buttonId == 4;
         }
     }
 

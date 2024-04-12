@@ -11,10 +11,10 @@ public class prompt1Controller : MonoBehaviour
     public float loc1ymax;
 
 
-    // public float loc2xmin;
-    // public float loc2xmax;
-    // public float loc2ymin;
-    // public float loc2ymax;
+    public float loc2xmin;
+    public float loc2xmax;
+    public float loc2ymin;
+    public float loc2ymax;
 
 
     private TextMeshProUGUI promptText;
@@ -28,9 +28,11 @@ public class prompt1Controller : MonoBehaviour
 
     void Update()
     {
+
         // 获取 PlayerA 的位置
         Vector3 playerAPosition = playerA.transform.position;
-
+        // Debug.Log("playerAPosition.x:" + playerAPosition.x);
+        // Debug.Log("playerAPosition.y:" + playerAPosition.y);
         // 检查 PlayerA 的位置是否在第一个范围内
         if (inarea(playerAPosition))
         {
@@ -54,13 +56,16 @@ public class prompt1Controller : MonoBehaviour
         if (playerAPosition.x >= loc1xmin && playerAPosition.x <= loc1xmax && 
             playerAPosition.y >= loc1ymin && playerAPosition.y <= loc1ymax)
         {
+            
+
+            return true;
+            
+        }
+        if (playerAPosition.x >= loc2xmin && playerAPosition.x <= loc2xmax && 
+            playerAPosition.y >= loc2ymin && playerAPosition.y <= loc2ymax)
+        {
             return true;
         }
-        // if (playerAPosition.x >= loc2xmin && playerAPosition.x <= loc2xmax && 
-        //     playerAPosition.y >= loc2ymin && playerAPosition.y <= loc2ymax)
-        // {
-        //     return true;
-        // }
 
         return false;
 
