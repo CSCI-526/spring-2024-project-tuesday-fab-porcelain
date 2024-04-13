@@ -9,15 +9,23 @@ public class FlagTriggerLevel : MonoBehaviour
 
     public GameObject flag; // 在Inspector中设置这个引用
 
+    private bool isLevelCompleted = false; //wy add
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // 检查进入触发器的是不是旗帜
-        if (other.gameObject == flag)
+        if (other.gameObject == flag && !isLevelCompleted)
         {
-            Debug.Log("Ball is close to the Flag!");
-            // 这里可以添加你想要的逻辑
+            isLevelCompleted = true; // 确保只触发一次
+            float completionTime = Time.time - GameManager.Instance.LevelStartTime;
+            string levelName = SceneManager.GetActiveScene().name;
+            GameDataCollector.Instance.RecordLevelCompletionTime(levelName, completionTime);
+
             Time.timeScale = 1;
             SceneManager.LoadScene("levelSelection");
+        }
+        else
+        {
+            Debug.Log("Trigger entered by non-flag object or level already completed");
         }
     }
 }
