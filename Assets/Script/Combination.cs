@@ -56,6 +56,11 @@ public class Combination : MonoBehaviour
 
     // 判断玩家B是否能使用固定
     public bool onfixB=false;
+
+    //力放大倍数
+    private float forcescale=1.0f;
+    public float scalefactor=3.0f;
+
     void Start()
     {
         //初始化玩家A&B; 初始化绘制连接线LineRenderer
@@ -304,9 +309,11 @@ public class Combination : MonoBehaviour
     void MoveHandler()
     {
         // 当A键 按下时, 给playerA的位置施加一个X 轴上的-5 单位的力
-        float forcescale=1.0f;
+
+        
         if (onfixA==true || onfixB==true){
-            forcescale=1.5f;
+            //当A或者B固定时，左右力放大为3倍
+            forcescale=scalefactor;
         }
         else{
             forcescale=1.0f;
@@ -350,10 +357,10 @@ public class Combination : MonoBehaviour
         // Debug.Log("bool:"+bool1);
         // Debug.Log("onfixA:"+onfixA);
         // Debug.Log("onfixB:"+onfixB);
-        if ((onfixA==false&&isPlayerAOnGround) || (onfixA==false&&onfixB==true))
+        
+        if (onfixA==false&&isPlayerAOnGround)
         {
-
-
+             // 防止B固定的时候A无限跳
             //当W 松开时, 给playerA 的位置施加一个Y 轴上的150 单位的力
             if (Input.GetKeyUp(KeyCode.W))//!!!!!!!!!!!!!!!!!!!!!    GetKeyUp====》GetKeyDown
             {
@@ -371,7 +378,7 @@ public class Combination : MonoBehaviour
 
 
             }
-
+          
             if (Input.GetKeyDown(KeyCode.W)) //改成W试一下
             {
                 aDownPressTime = Time.time;
@@ -400,11 +407,12 @@ public class Combination : MonoBehaviour
 
         // 当上箭头 松开时, 给playerB 的位置施加一个Y 轴上的150 单位的力
 
-        if ((onfixB==false&&isPlayerBOnGround) || (onfixB==false&&onfixA==true))
+        if ((onfixB==false&&isPlayerBOnGround))
         {
+            // 防止A固定的时候B无限跳
             if (Input.GetKeyUp(KeyCode.UpArrow))//!!!!!!!!!!!!!!!!!!!!!    GetKeyUp====》GetKeyDown
             {
-
+                
                 // 先计算小球B和小球A在X轴和Y轴上的差值
                 float horiDiff = playerB.transform.position.x - playerA.transform.position.x;
                 float vertDiff = playerB.transform.position.y - playerA.transform.position.y;

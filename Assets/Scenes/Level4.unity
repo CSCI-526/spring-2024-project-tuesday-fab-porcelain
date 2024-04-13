@@ -1534,6 +1534,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7214209742145015032, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
+      propertyPath: jumpinterval
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7214209742145015032, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: speedLimitA.x
       value: 40
       objectReference: {fileID: 0}
