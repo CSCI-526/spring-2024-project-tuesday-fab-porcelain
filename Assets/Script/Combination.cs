@@ -14,7 +14,7 @@ public class Combination : MonoBehaviour
     public GameObject playerB;
     // 显示两个小球的位置, 调试用
     public Vector3 playerAPosition;
-    public Vector3 playerBPosition; 
+    public Vector3 playerBPosition;
     // 左边力
     public float LeftForce = -10f;
     // 右边力
@@ -27,7 +27,7 @@ public class Combination : MonoBehaviour
 
     private float aDownPressTime;
     private float bDownPressTime;
-     
+
     public float jumpMaxTimes = 3;
     // 刚体
     Rigidbody2D rigidbody2DPlayerA;
@@ -50,16 +50,16 @@ public class Combination : MonoBehaviour
     // 画出射线检测的调试线
     bool drawDebugLine = true;
     //连接物索引
-    public int connectorIndex = 0; 
+    public int connectorIndex = 0;
     // 判断玩家A是否能使用固定
-    public bool onfixA=false;
+    public bool onfixA = false;
 
     // 判断玩家B是否能使用固定
-    public bool onfixB=false;
+    public bool onfixB = false;
 
     //力放大倍数
-    private float forcescale=1.0f;
-    public float scalefactor=3.0f;
+    private float forcescale = 1.0f;
+    public float scalefactor = 3.0f;
 
     void Start()
     {
@@ -99,13 +99,13 @@ public class Combination : MonoBehaviour
         RaycastHit2D hit1 = Raycast(playerB.transform.position - new Vector3(0.55f, 0.0f, 0.0f), new Vector2(-1, 0), 0.2f, -1);
         bool isPlayerBOnwallR = IsOnWall(hit1);
 
-        RaycastHit2D hit2 = Raycast(playerB.transform.position - new Vector3(0.0f, -0.55f, 0.0f), new Vector2(0,1), 0.2f, -1);
+        RaycastHit2D hit2 = Raycast(playerB.transform.position - new Vector3(0.0f, -0.55f, 0.0f), new Vector2(0, 1), 0.2f, -1);
         bool isPlayerBOntop = IsOnWall(hit2);
 
         RaycastHit2D hit3 = Raycast(playerB.transform.position - new Vector3(0.0f, 0.55f, 0.0f), new Vector2(0, -1), 0.2f, -1);
         bool isPlayerBOnground = IsOnWall(hit3);
 
-        bool isPlayBcanfix=isPlayerBOnwallL || isPlayerBOnwallR||isPlayerBOntop||isPlayerBOnground;
+        bool isPlayBcanfix = isPlayerBOnwallL || isPlayerBOnwallR || isPlayerBOntop || isPlayerBOnground;
 
         // 检测玩家A是否能挂住
         RaycastHit2D hit4 = Raycast(playerA.transform.position - new Vector3(-0.55f, 0.0f, 0.0f), new Vector2(1, 0), 0.2f, -1);
@@ -114,13 +114,13 @@ public class Combination : MonoBehaviour
         RaycastHit2D hit5 = Raycast(playerA.transform.position - new Vector3(0.55f, 0.0f, 0.0f), new Vector2(-1, 0), 0.2f, -1);
         bool isPlayerAOnwallR = IsOnWall(hit5);
 
-        RaycastHit2D hit6 = Raycast(playerA.transform.position - new Vector3(0.0f, -0.55f, 0.0f), new Vector2(0,1), 0.2f, -1);
+        RaycastHit2D hit6 = Raycast(playerA.transform.position - new Vector3(0.0f, -0.55f, 0.0f), new Vector2(0, 1), 0.2f, -1);
         bool isPlayerAOntop = IsOnWall(hit6);
 
-        RaycastHit2D hit7 = Raycast(playerA.transform.position - new Vector3(0.0f, 0.55f, 0.0f), new Vector2(0,-1), 0.2f, -1);
+        RaycastHit2D hit7 = Raycast(playerA.transform.position - new Vector3(0.0f, 0.55f, 0.0f), new Vector2(0, -1), 0.2f, -1);
         bool isPlayerAOnground = IsOnWall(hit7);
 
-        bool isPlayAcanfix=isPlayerAOnwallL || isPlayerAOnwallR||isPlayerAOntop||isPlayerAOnground;
+        bool isPlayAcanfix = isPlayerAOnwallL || isPlayerAOnwallR || isPlayerAOntop || isPlayerAOnground;
 
 
         if (Input.GetKey(KeyCode.M) && isPlayBcanfix)
@@ -129,14 +129,14 @@ public class Combination : MonoBehaviour
 
 
             rigidbody2DPlayerB.constraints = RigidbodyConstraints2D.FreezePosition;
-            onfixB=true;
+            onfixB = true;
 
         }
         else
         {
 
             rigidbody2DPlayerB.constraints = RigidbodyConstraints2D.None;
-            onfixB=false;
+            onfixB = false;
 
         }
         if (Input.GetKey(KeyCode.V) && isPlayAcanfix)
@@ -145,14 +145,14 @@ public class Combination : MonoBehaviour
 
 
             rigidbody2DPlayerA.constraints = RigidbodyConstraints2D.FreezePosition;
-            onfixA=true;
+            onfixA = true;
 
         }
         else
         {
 
             rigidbody2DPlayerA.constraints = RigidbodyConstraints2D.None;
-            onfixA=false;
+            onfixA = false;
 
         }
     }
@@ -181,7 +181,7 @@ public class Combination : MonoBehaviour
 
         stickCollider.transform.right = (playerB.transform.position - playerA.transform.position).normalized;
 
-        rigidbody2DPlayerA.centerOfMass=Vector3.zero;
+        rigidbody2DPlayerA.centerOfMass = Vector3.zero;
         rigidbody2DPlayerB.centerOfMass = Vector3.zero;
 
 
@@ -233,7 +233,7 @@ public class Combination : MonoBehaviour
         playerB.GetComponent<SpringJoint2D>().enabled = false;
 
     }
-   
+
 
     //转换到绳子
     void switchToRope()
@@ -258,38 +258,38 @@ public class Combination : MonoBehaviour
         playerB.GetComponent<DistanceJoint2D>().maxDistanceOnly = true;
         playerB.GetComponent<SpringJoint2D>().enabled = false;
 
-         
+
     }
 
     //转换到弹簧
-    void SwitchToSpring()
-    {
-        stickCollider.SetActive(false);
-        //Debug.Log("Switch to SPRING mode");
-        lineRenderer.positionCount = 2;
-        // 模拟金属颜色
-        Color metalColor = new Color(0.75f, 0.75f, 0.8f, 1f);
-        lineRenderer.startColor = metalColor;
-        lineRenderer.endColor = metalColor;
+    // void SwitchToSpring()
+    // {
+    //     stickCollider.SetActive(false);
+    //     //Debug.Log("Switch to SPRING mode");
+    //     lineRenderer.positionCount = 2;
+    //     // 模拟金属颜色
+    //     Color metalColor = new Color(0.75f, 0.75f, 0.8f, 1f);
+    //     lineRenderer.startColor = metalColor;
+    //     lineRenderer.endColor = metalColor;
 
-        //玩家A启用距离4,禁用距离矫正器,启用弹簧关节
-        playerA.GetComponent<DistanceJoint2D>().enabled = false;
-        playerA.GetComponent<SpringJoint2D>().enabled = true;
-        playerA.GetComponent<SpringJoint2D>().distance = 4;
+    //     //玩家A启用距离4,禁用距离矫正器,启用弹簧关节
+    //     playerA.GetComponent<DistanceJoint2D>().enabled = false;
+    //     playerA.GetComponent<SpringJoint2D>().enabled = true;
+    //     playerA.GetComponent<SpringJoint2D>().distance = 4;
 
-        playerB.GetComponent<DistanceJoint2D>().enabled = false;
-        playerB.GetComponent<SpringJoint2D>().enabled = true;
-        playerB.GetComponent<SpringJoint2D>().distance = 4;
-    }
-   
+    //     playerB.GetComponent<DistanceJoint2D>().enabled = false;
+    //     playerB.GetComponent<SpringJoint2D>().enabled = true;
+    //     playerB.GetComponent<SpringJoint2D>().distance = 4;
+    // }
+
     void CombinationSwitch()
-    { 
-        if (connectorIndex == 1 || connectorIndex ==2)
+    {
+        if (connectorIndex == 1 || connectorIndex == 2)
         {
             if (Physics2D.Linecast(playerA.transform.position, playerB.transform.position, LayerMask.GetMask("Ground")))
                 return;
         }
-         
+
         //按空格切换连接方式
         if (Input.GetKeyDown(KeyCode.Y))
         {
@@ -300,7 +300,7 @@ public class Combination : MonoBehaviour
             {
                 case 0: switchToStick(); break;
                 case 1: switchToRope(); break;
-                case 2: SwitchToSpring(); break;
+                    // case 2: SwitchToSpring(); break;
             }
         }
     }
@@ -310,36 +310,38 @@ public class Combination : MonoBehaviour
     {
         // 当A键 按下时, 给playerA的位置施加一个X 轴上的-5 单位的力
 
-        
-        if (onfixA==true || onfixB==true){
+
+        if (onfixA == true || onfixB == true)
+        {
             //当A或者B固定时，左右力放大为3倍
-            forcescale=scalefactor;
+            forcescale = scalefactor;
         }
-        else{
-            forcescale=1.0f;
+        else
+        {
+            forcescale = 1.0f;
         }
         if (Input.GetKey(KeyCode.A))
         {
 
-            rigidbody2DPlayerA.AddForceAtPosition(new Vector2(LeftForce, 0.0f)*forcescale, playerA.transform.position, ForceMode2D.Force);
+            rigidbody2DPlayerA.AddForceAtPosition(new Vector2(LeftForce, 0.0f) * forcescale, playerA.transform.position, ForceMode2D.Force);
         }
 
         // 当D键 按下时, 给playerBlue 的位置施加一个X 轴上的5 单位的力
         if (Input.GetKey(KeyCode.D))
         {
-            rigidbody2DPlayerA.AddForceAtPosition(new Vector2(RightForce, 0.0f)*forcescale, playerA.transform.position, ForceMode2D.Force);
+            rigidbody2DPlayerA.AddForceAtPosition(new Vector2(RightForce, 0.0f) * forcescale, playerA.transform.position, ForceMode2D.Force);
         }
 
         // 当左箭头 按下时, 给playerB的位置施加一个X 轴上的-5 单位的力
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            rigidbody2DPlayerB.AddForceAtPosition(new Vector2(LeftForce, 0.0f)*forcescale, playerB.transform.position, ForceMode2D.Force);
+            rigidbody2DPlayerB.AddForceAtPosition(new Vector2(LeftForce, 0.0f) * forcescale, playerB.transform.position, ForceMode2D.Force);
         }
 
         // 当右箭头 按下时, 给playerB 的位置施加一个X 轴上的5 单位的力
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            rigidbody2DPlayerB.AddForceAtPosition(new Vector2(RightForce, 0.0f)*forcescale, playerB.transform.position, ForceMode2D.Force);
+            rigidbody2DPlayerB.AddForceAtPosition(new Vector2(RightForce, 0.0f) * forcescale, playerB.transform.position, ForceMode2D.Force);
         }
     }
 
@@ -352,15 +354,15 @@ public class Combination : MonoBehaviour
         isPlayerAOnGround = Physics2D.RaycastAll(playerA.transform.position - new Vector3(0.0f, 0.55f, 0.0f), new Vector2(0, -1), 0.2f, LayerMask.GetMask("Ground")).Length > 0;
         playerAPosition = playerA.transform.position;
         playerBPosition = playerB.transform.position;
-        
+
         // bool bool1=(onfixA==false&&isPlayerAOnGround) || (onfixA==false&&onfixB==true);
         // Debug.Log("bool:"+bool1);
         // Debug.Log("onfixA:"+onfixA);
         // Debug.Log("onfixB:"+onfixB);
-        
-        if (onfixA==false&&isPlayerAOnGround)
+
+        if (onfixA == false && isPlayerAOnGround)
         {
-             // 防止B固定的时候A无限跳
+            // 防止B固定的时候A无限跳
             //当W 松开时, 给playerA 的位置施加一个Y 轴上的150 单位的力
             if (Input.GetKeyUp(KeyCode.W))//!!!!!!!!!!!!!!!!!!!!!    GetKeyUp====》GetKeyDown
             {
@@ -378,7 +380,7 @@ public class Combination : MonoBehaviour
 
 
             }
-          
+
             if (Input.GetKeyDown(KeyCode.W)) //改成W试一下
             {
                 aDownPressTime = Time.time;
@@ -387,15 +389,15 @@ public class Combination : MonoBehaviour
             }
             if (Input.GetKey(KeyCode.W) && aGroundDown)   //改成W试一下
             {
-                float time = Time.time - aDownPressTime; 
+                float time = Time.time - aDownPressTime;
                 AFace.SetFaceRed(Mathf.Clamp01(time / 1.5f));
             }
             if (Input.GetKeyUp(KeyCode.W) && aGroundDown)  //改成W试一下
             {
-                float time = Time.time- aDownPressTime;
-                float times =Mathf.Clamp01( time / 1.5f) *jumpMaxTimes;
-                 
-                rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, times* jumpForce), playerA.transform.position, ForceMode2D.Impulse);
+                float time = Time.time - aDownPressTime;
+                float times = Mathf.Clamp01(time / 1.5f) * jumpMaxTimes;
+
+                rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, times * jumpForce), playerA.transform.position, ForceMode2D.Impulse);
                 AFace.SetFaceRed(0);
             }
         }
@@ -407,12 +409,12 @@ public class Combination : MonoBehaviour
 
         // 当上箭头 松开时, 给playerB 的位置施加一个Y 轴上的150 单位的力
 
-        if ((onfixB==false&&isPlayerBOnGround))
+        if ((onfixB == false && isPlayerBOnGround))
         {
             // 防止A固定的时候B无限跳
             if (Input.GetKeyUp(KeyCode.UpArrow))//!!!!!!!!!!!!!!!!!!!!!    GetKeyUp====》GetKeyDown
             {
-                
+
                 // 先计算小球B和小球A在X轴和Y轴上的差值
                 float horiDiff = playerB.transform.position.x - playerA.transform.position.x;
                 float vertDiff = playerB.transform.position.y - playerA.transform.position.y;
@@ -437,7 +439,7 @@ public class Combination : MonoBehaviour
                 float time = Time.time - bDownPressTime;
                 BFace.SetFaceRed(Mathf.Clamp01(time / 1.5f));
             }
-            if (Input.GetKeyUp(KeyCode.UpArrow) &&bGroundDown)
+            if (Input.GetKeyUp(KeyCode.UpArrow) && bGroundDown)
             {
                 float time = Time.time - bDownPressTime;
                 float times = Mathf.Clamp01(time / 1.5f) * jumpMaxTimes;
