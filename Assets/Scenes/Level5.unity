@@ -6688,6 +6688,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 863261990600809565, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 863261990600809565, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2373675591737502644, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: m_Color.b
       value: 0.9254902
@@ -6802,11 +6810,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7214209742145015032, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: speedLimitA.x
-      value: 40
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7214209742145015032, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: speedLimitB.x
-      value: 40
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7565276448376751027, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: m_LocalPosition.x
