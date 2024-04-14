@@ -11,7 +11,6 @@ public class FlagTriggerLevel : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("in");
         // 检查进入触发器的是不是旗帜
         if (other.gameObject == flag)
         {
