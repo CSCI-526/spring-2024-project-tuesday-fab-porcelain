@@ -1554,8 +1554,16 @@ PrefabInstance:
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7214209742145015032, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
+      propertyPath: speedLimitA.y
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 7214209742145015032, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: speedLimitB.x
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7214209742145015032, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
+      propertyPath: speedLimitB.y
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 9027296643138924671, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: m_Color.b
@@ -1659,7 +1667,7 @@ Transform:
   m_GameObject: {fileID: 762270671}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -34.08, y: 4.9, z: -0.34202933}
+  m_LocalPosition: {x: -34.08, y: 5.65, z: -0.34202933}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

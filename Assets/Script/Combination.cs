@@ -375,7 +375,7 @@ public class Combination : MonoBehaviour
                 bool shouldApplyBoost = connectorIndex == 0 && vertDiff > 0 && Mathf.Abs(horiDiff) <= 1;
 
                 // 应用跳跃力，如果满足条件则应用加倍力
-                float appliedForce = shouldApplyBoost ? jumpForce * 4 : jumpForce;
+                float appliedForce = shouldApplyBoost ? jumpForce * 3 : jumpForce;
                 rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, appliedForce), playerA.transform.position, ForceMode2D.Impulse);
 
 
@@ -423,7 +423,7 @@ public class Combination : MonoBehaviour
                 bool shouldApplyBoost = connectorIndex == 0 && vertDiff < 0 && Mathf.Abs(horiDiff) <= 1;
 
                 // 应用跳跃力，如果满足条件则应用加倍力
-                float appliedForce = shouldApplyBoost ? jumpForce * 4 : jumpForce;
+                float appliedForce = shouldApplyBoost ? jumpForce * 3 : jumpForce;
                 rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, appliedForce), playerB.transform.position, ForceMode2D.Impulse);
 
 
