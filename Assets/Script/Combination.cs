@@ -420,7 +420,7 @@ public class Combination : MonoBehaviour
                 float vertDiff = playerB.transform.position.y - playerA.transform.position.y;
 
                 // 判断是否应该应用加倍跳跃力
-                bool shouldApplyBoost = connectorIndex == 0 && vertDiff > 0 && Mathf.Abs(horiDiff) <= 1;
+                bool shouldApplyBoost = connectorIndex == 0 && vertDiff < 0 && Mathf.Abs(horiDiff) <= 1;
 
                 // 应用跳跃力，如果满足条件则应用加倍力
                 float appliedForce = shouldApplyBoost ? jumpForce * 4 : jumpForce;
