@@ -1871,10 +1871,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -6574,8 +6574,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
-  m_fontSizeBase: 18
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6640,7 +6640,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -306, y: 250.73999}
+  m_AnchoredPosition: {x: -700, y: 500}
   m_SizeDelta: {x: 154.5321, y: 30.5137}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1871806326
@@ -6688,6 +6688,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 863261990600809565, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 863261990600809565, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2373675591737502644, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: m_Color.b
       value: 0.9254902
@@ -6802,11 +6810,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7214209742145015032, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: speedLimitA.x
-      value: 40
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7214209742145015032, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: speedLimitB.x
-      value: 40
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7565276448376751027, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
       propertyPath: m_LocalPosition.x

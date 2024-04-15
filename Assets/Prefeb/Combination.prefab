@@ -1723,12 +1723,15 @@ MonoBehaviour:
   jumpMaxTimes: 3
   lineRenderer: {fileID: 5781769822920771137}
   distanceAB: 0
-  speedLimitA: {x: 50, y: 50}
-  speedLimitB: {x: 50, y: 50}
+  speedLimitA: {x: 20, y: 50}
+  speedLimitB: {x: 20, y: 50}
   fallSpeed: 10
   isPlayerAOnGround: 1
   isPlayerBOnGround: 1
   connectorIndex: 0
+  onfixA: 0
+  onfixB: 0
+  scalefactor: 3
   stickCollider: {fileID: 4653494348960245152}
 --- !u!1 &6369320500088683644
 GameObject:
