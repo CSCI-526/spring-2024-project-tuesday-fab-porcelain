@@ -18,10 +18,6 @@ public class GameOverRestart : MonoBehaviour
         Time.timeScale = 1;
         string sceneN=sN.getName();
         Debug.Log("continue scene:"+sceneN);
-
-        // 重置关卡时间再重新加载关卡 wy add
-        GameManager.Instance.ResetLevelStartTime();
-
         SceneManager.LoadScene(sceneN);
     }
 }
