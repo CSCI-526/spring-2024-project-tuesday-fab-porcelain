@@ -1723,8 +1723,8 @@ MonoBehaviour:
   jumpMaxTimes: 3
   lineRenderer: {fileID: 5781769822920771137}
   distanceAB: 0
-  speedLimitA: {x: 20, y: 30}
-  speedLimitB: {x: 20, y: 30}
+  speedLimitA: {x: 20, y: 50}
+  speedLimitB: {x: 20, y: 50}
   fallSpeed: 10
   isPlayerAOnGround: 1
   isPlayerBOnGround: 1

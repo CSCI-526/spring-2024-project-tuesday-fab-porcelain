@@ -294,7 +294,7 @@ public class Combination : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Y))
         {
             connectorIndex += 1;
-            connectorIndex %= 3;
+            connectorIndex %= 2;
 
             switch (connectorIndex)
             {
@@ -372,10 +372,10 @@ public class Combination : MonoBehaviour
                 float vertDiff = playerB.transform.position.y - playerA.transform.position.y;
 
                 // 判断是否应该应用加倍跳跃力
-                bool shouldApplyBoost = vertDiff > 0 && Mathf.Abs(horiDiff) <= 1;
+                bool shouldApplyBoost = connectorIndex == 0 && vertDiff > 0 && Mathf.Abs(horiDiff) <= 1;
 
                 // 应用跳跃力，如果满足条件则应用加倍力
-                float appliedForce = shouldApplyBoost ? jumpForce * 3 : jumpForce;
+                float appliedForce = shouldApplyBoost ? jumpForce * 4 : jumpForce;
                 rigidbody2DPlayerA.AddForceAtPosition(new Vector2(0.0f, appliedForce), playerA.transform.position, ForceMode2D.Impulse);
 
 
@@ -420,10 +420,10 @@ public class Combination : MonoBehaviour
                 float vertDiff = playerB.transform.position.y - playerA.transform.position.y;
 
                 // 判断是否应该应用加倍跳跃力
-                bool shouldApplyBoost = vertDiff < 0 && Mathf.Abs(horiDiff) <= 1;
+                bool shouldApplyBoost = connectorIndex == 0 && vertDiff > 0 && Mathf.Abs(horiDiff) <= 1;
 
                 // 应用跳跃力，如果满足条件则应用加倍力
-                float appliedForce = shouldApplyBoost ? jumpForce * 3 : jumpForce;
+                float appliedForce = shouldApplyBoost ? jumpForce * 4 : jumpForce;
                 rigidbody2DPlayerB.AddForceAtPosition(new Vector2(0.0f, appliedForce), playerB.transform.position, ForceMode2D.Impulse);
 
 
