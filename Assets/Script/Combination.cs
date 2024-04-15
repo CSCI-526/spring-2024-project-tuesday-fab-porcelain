@@ -22,6 +22,11 @@ public class Combination : MonoBehaviour
     // 起跳力度
     public float jumpForce = 220f;
 
+    //用于统计材质使用次数
+    public static int stickUsageCount = 0;
+    public static int ropeUsageCount = 0;
+    public static int springUsageCount = 0;
+
     public Face AFace;
     public Face BFace;
 
@@ -63,6 +68,13 @@ public class Combination : MonoBehaviour
         rigidbody2DPlayerB = playerB.GetComponent<Rigidbody2D>();
         lineRenderer = playerA.GetComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
+
+
+        ////因为最开始是使用木棍，所以木棍的使用次数初始就为1
+        //Debug.Log("Stick Usage Count: " + stickUsageCount + " | Rope Usage Count: " + ropeUsageCount + " | Spring Usage Count: " + springUsageCount);
+        stickUsageCount = 1;
+        Debug.Log("Stick Usage Count: " + stickUsageCount + " | Rope Usage Count: " + ropeUsageCount + " | Spring Usage Count: " + springUsageCount);
+
         //调用切换功能,初始调用棍子链接
         CombinationSwitch();
         switchToStick();
@@ -293,10 +305,12 @@ public class Combination : MonoBehaviour
 
             switch (connectorIndex)
             {
-                case 0: switchToStick(); break;
-                case 1: switchToRope(); break;
-                case 2: SwitchToSpring(); break;
+                case 0: stickUsageCount++; switchToStick(); break;
+                case 1: ropeUsageCount++; switchToRope(); break;
+                case 2: springUsageCount++; SwitchToSpring(); break;
             }
+            // 输出统计结果到控制台
+            Debug.Log("Stick Usage Count: " + stickUsageCount + " | Rope Usage Count: " + ropeUsageCount + " | Spring Usage Count: " + springUsageCount);
         }
     }
 

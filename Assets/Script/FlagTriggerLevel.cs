@@ -19,6 +19,11 @@ public class FlagTriggerLevel : MonoBehaviour
             float completionTime = Time.time - GameManager.Instance.LevelStartTime;
             string levelName = SceneManager.GetActiveScene().name;
             GameDataCollector.Instance.RecordLevelCompletionTime(levelName, completionTime);
+            // 获取材质使用次数
+            int stickCount = Combination.stickUsageCount;
+            int ropeCount = Combination.ropeUsageCount;
+            int springCount = Combination.springUsageCount;
+            GameDataCollector.Instance.RecordMaterialUsage(stickCount, ropeCount, springCount);
 
             Time.timeScale = 1;
             SceneManager.LoadScene("levelSelection");

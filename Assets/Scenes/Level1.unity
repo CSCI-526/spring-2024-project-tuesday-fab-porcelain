@@ -153,6 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed271929edb24904bdf6dc1d046038c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  touchLava: {fileID: 1087807049}
   checkpointManager: {fileID: 1071281927}
   checkpointNumber: 2
 --- !u!61 &159507115
@@ -425,6 +426,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 271935991}
   m_CullTransparentMesh: 1
+--- !u!1 &419685850
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 419685852}
+  - component: {fileID: 419685853}
+  m_Layer: 0
+  m_Name: DeathUploader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &419685852
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 419685850}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 32.94186, y: -3.1792152, z: 0.17739242}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &419685853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 419685850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e7be53f61cb27b4ebd533381a6fd913, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &483765222 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5946959835655325533, guid: 535a400bf9864cf4c8e2e7fd88206860, type: 3}
@@ -628,6 +673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed271929edb24904bdf6dc1d046038c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  touchLava: {fileID: 1087807049}
   checkpointManager: {fileID: 1071281927}
   checkpointNumber: 1
 --- !u!61 &527836377
@@ -1565,6 +1611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b2122196d404449f9654c6ddfc18014, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deathDataUploader: {fileID: 419685853}
 --- !u!61 &1087807050
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3114,3 +3161,4 @@ SceneRoots:
   - {fileID: 1071281928}
   - {fileID: 1671326153}
   - {fileID: 1724469910}
+  - {fileID: 419685852}

@@ -7,7 +7,7 @@ using System.Linq;
 public class GameDataCollector : MonoBehaviour
 {
     public static GameDataCollector Instance;
-    private string firebaseUrl = "https://csci526proj-default-rtdb.firebaseio.com/levelCompletionTimes.json";
+    private string firebaseUrl = "https://csci526-19391-default-rtdb.firebaseio.com/levelCompletionTimes.json";
 
     private Dictionary<string, List<float>> levelCompletionTimes = new Dictionary<string, List<float>>();
 
@@ -34,6 +34,12 @@ public class GameDataCollector : MonoBehaviour
         StartCoroutine(PostFirebaseData(levelName, completionTime));
     }
 
+    public void RecordMaterialUsage(int stickCount, int ropeCount, int springCount)
+    {
+        string json = $"{{\"StickCount\":{stickCount}, \"RopeCount\":{ropeCount}, \"SpringCount\":{springCount}}}";
+        StartCoroutine(PostFirebaseData2("MaterialUsage", json));
+    }
+
     IEnumerator PostFirebaseData(string levelName, float completionTime)
     {
         string json = $"{{\"LevelName\":\"{levelName}\", \"CompletionTime\":{completionTime}}}";
@@ -53,4 +59,26 @@ public class GameDataCollector : MonoBehaviour
             }
         }
     }
+
+    IEnumerator PostFirebaseData2(string dataType, string jsonData)
+    {
+        string firebaseUrl2 = "https://csci526-19391-default-rtdb.firebaseio.com/" + dataType + ".json"; 
+
+        using (UnityWebRequest request = UnityWebRequest.Put(firebaseUrl2, jsonData))
+        {
+            request.method = UnityWebRequest.kHttpVerbPOST;
+            request.SetRequestHeader("Content-Type", "application/json");
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError($"Error uploading data: {request.error}");
+            }
+            else
+            {
+                Debug.Log($"Data uploaded successfully for {dataType}");
+            }
+        }
+    }
+
 }

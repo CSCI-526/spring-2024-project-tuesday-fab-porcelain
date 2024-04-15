@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CheckpointTrigger : MonoBehaviour
 {
+    public TouchLava touchLava;
+
     public CheckpointManager checkpointManager; // 在Inspector中设置这个变量以引用CheckpointManager对象
     public int checkpointNumber; // 在每个检查点的Inspector中设置这个变量以指定检查点编号
 
@@ -11,6 +13,8 @@ public class CheckpointTrigger : MonoBehaviour
     {
         if (other.gameObject.name == "PlayerA")
         {
+            Debug.Log("Last Checkpoint Number: " + checkpointNumber);
+            touchLava.UpdateLastCheckpointNumber(checkpointNumber);
             checkpointManager.CheckpointTriggered(checkpointNumber);
         }
     }

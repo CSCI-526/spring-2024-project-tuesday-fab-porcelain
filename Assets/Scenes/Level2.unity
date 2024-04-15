@@ -329,6 +329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed271929edb24904bdf6dc1d046038c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  touchLava: {fileID: 717588810}
   checkpointManager: {fileID: 189803696}
   checkpointNumber: 5
 --- !u!61 &166302654
@@ -576,6 +577,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed271929edb24904bdf6dc1d046038c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  touchLava: {fileID: 717588810}
   checkpointManager: {fileID: 189803696}
   checkpointNumber: 4
 --- !u!61 &211049114
@@ -885,6 +887,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b2122196d404449f9654c6ddfc18014, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deathDataUploader: {fileID: 545370041}
 --- !u!61 &465058721
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1182,6 +1185,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 884432726490040774, guid: b7ebdb9f85c0b41b89bcdc222ace939b, type: 3}
   m_PrefabInstance: {fileID: 885332822}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &545370040
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 545370042}
+  - component: {fileID: 545370041}
+  m_Layer: 0
+  m_Name: DeathUploader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &545370041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 545370040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e7be53f61cb27b4ebd533381a6fd913, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &545370042
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 545370040}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.5171471, y: -14.999175, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &553483319
 GameObject:
   m_ObjectHideFlags: 0
@@ -1342,6 +1389,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed271929edb24904bdf6dc1d046038c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  touchLava: {fileID: 465058720}
   checkpointManager: {fileID: 189803696}
   checkpointNumber: 3
 --- !u!61 &577724829
@@ -1658,6 +1706,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b2122196d404449f9654c6ddfc18014, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deathDataUploader: {fileID: 545370041}
 --- !u!61 &717588811
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4180,6 +4229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed271929edb24904bdf6dc1d046038c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  touchLava: {fileID: 717588810}
   checkpointManager: {fileID: 189803696}
   checkpointNumber: 6
 --- !u!61 &1995173800
@@ -4456,3 +4506,4 @@ SceneRoots:
   - {fileID: 1995173801}
   - {fileID: 613399836}
   - {fileID: 907009518}
+  - {fileID: 545370042}

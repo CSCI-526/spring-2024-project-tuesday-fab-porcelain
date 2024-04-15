@@ -6,7 +6,7 @@ using System.Collections;
 public class CheckpointManager : MonoBehaviour
 {
     private Dictionary<int, float> checkpointTimes = new Dictionary<int, float>();
-    private string firebaseUrl = "https://csci526proj-default-rtdb.firebaseio.com/Checkpoints.json"; // 更换为你的Firebase数据库URL
+    private string firebaseUrl = "https://csci526-19391-default-rtdb.firebaseio.com/Checkpoints.json"; // 更换为你的Firebase数据库URL
 
     public void CheckpointTriggered(int checkpointNumber)
     {
