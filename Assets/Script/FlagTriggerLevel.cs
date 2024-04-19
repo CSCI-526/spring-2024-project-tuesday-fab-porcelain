@@ -26,7 +26,7 @@ public class FlagTriggerLevel : MonoBehaviour
             GameDataCollector.Instance.RecordMaterialUsage(stickCount, ropeCount);
 
             Time.timeScale = 1;
-            SceneManager.LoadScene("levelSelection");
+            SceneManager.LoadScene("LevelPassed");
         }
         else
         {

@@ -6,6 +6,8 @@ public class sceneName : MonoBehaviour
 {
     private static string playingsceneN;
     // Start is called before the first frame update
+
+    private static List<string> levelpassList = new List<string>();
     public void setName(string name){
 
         playingsceneN=name;
@@ -18,5 +20,20 @@ public class sceneName : MonoBehaviour
         return playingsceneN;
         
 
+    }
+
+    public bool levelnpassq(string leveln){
+        foreach (string level in levelpassList)
+        {
+            if (level == leveln)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public void passlevel(string leveln){
+        levelpassList.Add(leveln);
     }
 }
