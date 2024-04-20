@@ -5,11 +5,11 @@ using UnityEngine;
 public class DoubleButton : MonoBehaviour
 {
     public int buttonId;
-    private DoubleButtonTrigger trickController;
+    private DoubleButtonTrigger2 trickController;
 
     private void Start()
     {
-        trickController = GetComponentInParent<DoubleButtonTrigger>();
+        trickController = GetComponentInParent<DoubleButtonTrigger2>();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
