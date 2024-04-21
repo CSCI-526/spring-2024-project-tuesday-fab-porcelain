@@ -3,13 +3,28 @@ using UnityEngine.Networking;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
+using System;
 
 public class GameDataCollector : MonoBehaviour
 {
     public static GameDataCollector Instance;
     private string firebaseUrl = "https://csci526-19391-default-rtdb.firebaseio.com/levelCompletionTimes.json";
 
-    private Dictionary<string, List<float>> levelCompletionTimes = new Dictionary<string, List<float>>();
+    public class LevelCompletionData
+    {
+        public float CompletionTime;
+        public string Timestamp;
+
+        public LevelCompletionData(float completionTime, string timestamp)
+        {
+            CompletionTime = completionTime;
+            Timestamp = timestamp;
+        }
+    }
+
+
+    private Dictionary<string, List<LevelCompletionData>> levelCompletionTimes = new Dictionary<string, List<LevelCompletionData>>();
+
 
     private void Awake()
     {
@@ -26,23 +41,28 @@ public class GameDataCollector : MonoBehaviour
 
     public void RecordLevelCompletionTime(string levelName, float completionTime)
     {
+        string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
         if (!levelCompletionTimes.ContainsKey(levelName))
         {
-            levelCompletionTimes[levelName] = new List<float>();
+            levelCompletionTimes[levelName] = new List<LevelCompletionData>();
         }
-        levelCompletionTimes[levelName].Add(completionTime);
-        StartCoroutine(PostFirebaseData(levelName, completionTime));
+        levelCompletionTimes[levelName].Add(new LevelCompletionData(completionTime, timestamp));
+
+        StartCoroutine(PostFirebaseData(levelName, completionTime, timestamp));
     }
+
 
     public void RecordMaterialUsage(int stickCount, int ropeCount)
     {
-        string json = $"{{\"StickCount\":{stickCount}, \"RopeCount\":{ropeCount}}}";
+        string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        string json = $"{{\"StickCount\":{stickCount}, \"RopeCount\":{ropeCount}, \"Timestamp\":\"{timestamp}\"}}";
         StartCoroutine(PostFirebaseData2("MaterialUsage", json));
     }
 
-    IEnumerator PostFirebaseData(string levelName, float completionTime)
+    IEnumerator PostFirebaseData(string levelName, float completionTime, string timestamp)
     {
-        string json = $"{{\"LevelName\":\"{levelName}\", \"CompletionTime\":{completionTime}}}";
+        string json = $"{{\"LevelName\":\"{levelName}\", \"CompletionTime\":{completionTime}, \"Timestamp\":\"{timestamp}\"}}";
         using (UnityWebRequest request = UnityWebRequest.Put(firebaseUrl, json))
         {
             request.method = UnityWebRequest.kHttpVerbPOST;

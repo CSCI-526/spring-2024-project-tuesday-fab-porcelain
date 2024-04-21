@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Networking;
 using System.Collections;
+using System;
 
 public class CheckpointManager : MonoBehaviour
 {
@@ -24,7 +25,8 @@ public class CheckpointManager : MonoBehaviour
 
     IEnumerator UploadCheckpointData(int startCheckpoint, int endCheckpoint, float timeDifference)
     {
-        string jsonData = $"{{\"FromCheckpoint\":{startCheckpoint}, \"ToCheckpoint\":{endCheckpoint}, \"Time\":{timeDifference}}}";
+        string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        string jsonData = $"{{\"FromCheckpoint\":{startCheckpoint}, \"ToCheckpoint\":{endCheckpoint}, \"Time\":{timeDifference}, \"Timestamp\":\"{timestamp}\"}}";
         UnityWebRequest www = UnityWebRequest.Put(firebaseUrl, jsonData);
         www.method = UnityWebRequest.kHttpVerbPOST;
         www.SetRequestHeader("Content-Type", "application/json");
@@ -42,7 +44,7 @@ public class CheckpointManager : MonoBehaviour
     //public static CheckpointManager Instance;
 
     //private Dictionary<int, float> checkpointTimes = new Dictionary<int, float>();
-    //private string firebaseUrl = "https://csci526proj-default-rtdb.firebaseio.com/Checkpoints.json";
+    //private string firebaseUrl = "https://csci526-19391-default-rtdb.firebaseio.com/Checkpoints.json";
 
     //private void Awake()
     //{

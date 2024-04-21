@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Networking;
 using System.Collections;
+using System;
 
 public class DeathDataUploader : MonoBehaviour
 {
@@ -13,9 +14,10 @@ public class DeathDataUploader : MonoBehaviour
     {
        
         deathCount++;
+        
 
-       
-        string jsonData = $"{{\"LastCheckpoint\":{lastCheckpointNumber}, \"DeathCount\":{deathCount}}}";
+        string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        string jsonData = $"{{\"LastCheckpoint\":{lastCheckpointNumber}, \"DeathCount\":{deathCount}, \"Timestamp\": \"{timestamp}\"}}";
 
         
         StartCoroutine(UploadDeathData(jsonData));
