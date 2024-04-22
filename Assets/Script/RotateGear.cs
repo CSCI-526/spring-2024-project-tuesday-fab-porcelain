@@ -11,7 +11,7 @@ public class RotateGear : MonoBehaviour
     void Start()
     {
         StartCoroutine(SetMultiplier()); //I took the liberty to make a better function name
-        rotationSpeed = -90 / 5; //90 degrees per 5 seconds
+        rotationSpeed = -120 / 5; //90 degrees per 5 seconds
     }
  
     private void Update()
