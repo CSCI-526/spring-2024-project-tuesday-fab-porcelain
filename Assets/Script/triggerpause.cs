@@ -8,7 +8,6 @@ public class triggerpause : MonoBehaviour
 {
     private int trigger=1;
     public Button pauseButton;
-    public TextMeshProUGUI buttonText;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,18 +20,27 @@ public class triggerpause : MonoBehaviour
     {
         
     }
+    // public void OnPauseButton()
+    // {
+    //     if (trigger==1){
+    //         Time.timeScale = 0;
+    //         buttonText.text = "CONTINUE";
+    //         SceneManager.LoadScene("Pause", LoadSceneMode.Additive);
+    //         Debug.Log("Pause");
+    //     }
+    //     else{
+    //         Time.timeScale = 1;
+    //         buttonText.text = "PAUSE";
+    //         Debug.Log("Continue");
+    //     }
+    //     trigger=1-trigger;
+    // }
     public void OnPauseButton()
     {
-        if (trigger==1){
-            Time.timeScale = 0;
-            buttonText.text = "CONTINUE";
-            Debug.Log("Pause");
-        }
-        else{
-            Time.timeScale = 1;
-            buttonText.text = "PAUSE";
-            Debug.Log("Continue");
-        }
-        trigger=1-trigger;
+
+        SceneManager.LoadScene("Pause", LoadSceneMode.Additive);
+        Debug.Log("Pause");
+
     }
+  
 }
