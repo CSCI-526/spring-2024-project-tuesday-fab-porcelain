@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 public class triggerpause : MonoBehaviour
 {
-    private int trigger=1;
+    // private int trigger=1;
     public Button pauseButton;
     // Start is called before the first frame update
     void Start()
