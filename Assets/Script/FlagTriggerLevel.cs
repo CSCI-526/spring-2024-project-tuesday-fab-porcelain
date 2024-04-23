@@ -23,7 +23,7 @@ public class FlagTriggerLevel : MonoBehaviour
             int stickCount = Combination.stickUsageCount;
             int ropeCount = Combination.ropeUsageCount;
             //int springCount = Combination.springUsageCount;
-            GameDataCollector.Instance.RecordMaterialUsage(stickCount, ropeCount);
+            GameDataCollector.Instance.RecordMaterialUsage(levelName, stickCount, ropeCount);
 
             Time.timeScale = 1;
             SceneManager.LoadScene("LevelPassed");

@@ -77,6 +77,7 @@ public class Combination : MonoBehaviour
         ////因为最开始是使用木棍，所以木棍的使用次数初始就为1
         //Debug.Log("Stick Usage Count: " + stickUsageCount + " | Rope Usage Count: " + ropeUsageCount + " | Spring Usage Count: " + springUsageCount);
         stickUsageCount = 1;
+        ropeUsageCount = 0;
         Debug.Log("Stick Usage Count: " + stickUsageCount + " | Rope Usage Count: " + ropeUsageCount);
 
         //调用切换功能,初始调用棍子链接

@@ -53,10 +53,10 @@ public class GameDataCollector : MonoBehaviour
     }
 
 
-    public void RecordMaterialUsage(int stickCount, int ropeCount)
+    public void RecordMaterialUsage(string levelName, int stickCount, int ropeCount)
     {
-        string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-        string json = $"{{\"StickCount\":{stickCount}, \"RopeCount\":{ropeCount}, \"Timestamp\":\"{timestamp}\"}}";
+        //string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        string json = $"{{\"LevelName\":\"{levelName}\", \"StickCount\":{stickCount}, \"RopeCount\":{ropeCount}}}";
         StartCoroutine(PostFirebaseData2("MaterialUsage", json));
     }
 
